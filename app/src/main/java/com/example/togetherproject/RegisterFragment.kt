@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.togetherproject.model.AuthRepository
-import com.example.togetherproject.model.User
+import com.example.togetherproject.model.UserRepository
 
 
 private const val Parameter_1 = "param1"
@@ -64,8 +64,8 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        var authServer=AuthRepository.shared
-        var userServer=User.shared
+        var authServer=AuthRepository.authRepository
+        var userServer=UserRepository.shared
         registerButton.setOnClickListener {
 
             val email = emailField.text.toString()
@@ -82,7 +82,7 @@ class RegisterFragment : Fragment() {
             }
             authServer.registerUser(email, password) { success, error ->
                 if (success) {
-                    userServer.createUser(username,email){success,error->
+                    userServer.addUser(username,email){success,error->
                         if (success) {
                             Log.d("TAG", "User added to database")
                         } else {
