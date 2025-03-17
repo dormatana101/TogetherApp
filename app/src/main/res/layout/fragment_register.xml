@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/register_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:layoutDirection="ltr"> <!-- מגדיר שהכיוון תמיד LTR -->
+
+
+    <!-- App Logo and Name -->
+    <ImageView
+        android:id="@+id/logo_image"
+        android:layout_width="154dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/register_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Register"
+        android:textAlignment="viewStart"
+        android:gravity="start"
+        android:textColor="#000000"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo_image" />
+
+
+    <!-- Username Field -->
+
+    <EditText
+        android:id="@+id/username_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="32dp"
+        android:drawableLeft="@drawable/ic_user"
+        android:drawablePadding="8dp"
+        android:gravity="start"
+        android:hint="Enter your name"
+        android:padding="12dp"
+        android:textAlignment="viewStart"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_title" />
+
+    <EditText
+        android:id="@+id/email_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:drawableLeft="@drawable/email"
+        android:drawablePadding="8dp"
+        android:hint="Enter your email"
+        android:padding="12dp"
+        android:textAlignment="viewStart"
+        android:gravity="start"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#808080"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username_field" />
+
+    <!-- Password Field -->
+    <EditText
+        android:id="@+id/password_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:drawableLeft="@drawable/lock"
+        android:drawablePadding="8dp"
+        android:hint="Enter password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:textAlignment="viewStart"
+        android:gravity="start"
+        android:textColorHint="#808080"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_field" />
+
+    <!-- Confirm Password Field -->
+    <EditText
+        android:id="@+id/confirm_password_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:drawableLeft="@drawable/lock"
+        android:drawablePadding="8dp"
+        android:hint="Enter confirm password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:textAlignment="viewStart"
+        android:gravity="start"
+        android:textColorHint="#808080"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_field" />
+
+    <!-- Navigation Buttons -->
+    <LinearLayout
+        android:id="@+id/navigation_buttons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="32dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirm_password_field">
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#B68181"
+            android:text="Back"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/Register_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#54BA61"
+            android:text="Register"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Or Login With Separator -->
+    <TextView
+        android:id="@+id/or_login_with"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:gravity="start"
+        android:text="or login with"
+        android:textAlignment="viewStart"
+        android:textColor="#808080"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_buttons" />
+
+    <!-- Social Login Buttons -->
+    <LinearLayout
+        android:id="@+id/social_login_buttons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/or_login_with">
+
+        <Button
+            android:id="@+id/facebook_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#4267B2"
+            android:drawableLeft="@drawable/facebook"
+            android:drawablePadding="8dp"
+            android:gravity="start"
+            android:text="Facebook"
+            android:textAlignment="viewStart"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+        <Button
+            android:id="@+id/google_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#DB4437"
+            android:drawableLeft="@drawable/google"
+            android:drawablePadding="8dp"
+            android:gravity="start"
+            android:text="Google"
+            android:textAlignment="viewStart"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
