@@ -13,13 +13,13 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_register"
-            android:name="com.example.ease.RegisterFragment"
+            android:name="com.example.togetherproject.RegisterFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_login"
-            android:name="com.example.ease.loginFragment"
+            android:name="com.example.togetherproject.loginFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
