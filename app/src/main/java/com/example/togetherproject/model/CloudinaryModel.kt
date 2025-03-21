@@ -1,90 +1,63 @@
 package com.example.togetherproject.model
-import android.app.Application
-import android.content.Context
+
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.togetherproject.BuildConfig
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
-import com.cloudinary.android.policy.GlobalUploadPolicy
 import com.example.togetherproject.base.MyApplication
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okio.IOException
 import java.io.File
 import java.io.FileOutputStream
+import android.content.Context
 
 class CloudinaryModel {
-    companion object {
-        private var isInitialized = false
-    }
-    init{
-        val config= mapOf(
-            "cloud_name" to com.example.togetherproject.BuildConfig.CLOUD_NAME,
-            "api_key" to com.example.togetherproject.BuildConfig.API_KEY,
-            "api_secret" to com.example.togetherproject.BuildConfig.API_SECRET,
-            "api_secret" to com.example.togetherproject.BuildConfig.API_SECRET
-        )
-        MyApplication.Globals.context?.let {
-            if (!isInitialized) {
-                MediaManager.init(it, config)
-                MediaManager.get().globalUploadPolicy = GlobalUploadPolicy.defaultPolicy()
-                isInitialized = true
-            }
-        }
-    }
-    fun uploadImage(bitmap: Bitmap, name : String, onSuccess: (String?) -> Unit, onError: (String?) -> Unit){
-        //val context= MyApplication.Globals.context ?:return
+
+    fun sendImageToCloud(
+        bitmap: Bitmap,
+        name: String,
+        onSuccess: (String?) -> Unit,
+        onError: (String?) -> Unit
+    ) {
         val context = MyApplication.Globals.context
-        if (context == null){
+        if (context == null) {
+            onError("Initialization error: context is null – MyApplication not set up?")
             return
         }
-        val file :File= bitmap.toFile( context,name )
-        MediaManager.get().upload(file.path)
+
+        val file = bitmap.toFile(context, name)
+
+        MediaManager.get()
+            .upload(file.path)
             .option("folder", "images")
-            .callback(object: UploadCallback{
-
+            .callback(object : UploadCallback {
                 override fun onStart(requestId: String?) {
-
+                    // Начало загрузки – можно добавить дополнительное логирование
                 }
 
                 override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
-
+                    // Обновление прогресса (при необходимости)
                 }
 
                 override fun onSuccess(requestId: String?, resultData: Map<*, *>) {
-                    val url=resultData["secure_url"] as? String?: ""
+                    val url = resultData["secure_url"] as? String ?: ""
                     onSuccess(url)
                 }
 
                 override fun onError(requestId: String?, error: ErrorInfo?) {
-                    onError(error?.description?: "Unknown error")
+                    onError(error?.description ?: "Upload error: unknown issue")
                 }
 
                 override fun onReschedule(requestId: String?, error: ErrorInfo?) {
-
+                    // Обработка переноса загрузки (если требуется)
                 }
             })
             .dispatch()
     }
-  fun Bitmap.toFile (context: Context, name: String) : File{
-        val file= File(context.cacheDir, "image_$name.jpg")
-        FileOutputStream(file).use{ stream ->
-            Log.d("Cloudinary", "uploadImage5 ofek ")
-            this.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        }
-        return file
-    }
 
-    fun deleteImage(previousImageUrl: String, onComplete: (Boolean, String?) -> Unit) {
-        val publicId = extractPublicIdFromUrl(previousImageUrl)
+    fun removeImageFromCloud(previousImageUrl: String, onComplete: (Boolean, String?) -> Unit) {
+        val publicId = getCloudPublicId(previousImageUrl)
 
         Thread {
             try {
@@ -108,14 +81,18 @@ class CloudinaryModel {
         }.start()
     }
 
-
-    fun extractPublicIdFromUrl(url: String): String {
+    fun getCloudPublicId(url: String): String {
         val afterUpload = url.substringAfter("upload/")
-
         val afterVersion = afterUpload.substringAfter("/")
-
         return afterVersion.substringBeforeLast(".")
     }
 
-
+    private fun Bitmap.toFile(context: Context, name: String): File {
+        val file = File(context.cacheDir, "image_$name.jpg")
+        FileOutputStream(file).use { stream ->
+            Log.d("Cloudinary", "Storing bitmap to file: ${file.absolutePath}")
+            this.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        }
+        return file
+    }
 }

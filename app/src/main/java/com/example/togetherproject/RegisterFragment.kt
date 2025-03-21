@@ -12,10 +12,8 @@ import android.widget.Toast
 import com.example.togetherproject.model.AuthRepository
 import com.example.togetherproject.model.UserRepository
 
-
 private const val Parameter_1 = "param1"
 private const val Parameter_2 = "param2"
-
 
 class RegisterFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -26,7 +24,6 @@ class RegisterFragment : Fragment() {
     private lateinit var confirmPasswordField: TextView
     private lateinit var registerButton: Button
     private lateinit var name: TextView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +37,10 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_register, container, false)
-
         val backButton: Button = view.findViewById(R.id.back_button)
         backButton.setOnClickListener {
-            // Call the activity's method to replace the fragment
-            (activity as? LoginRegisterActivity)?.onBackButtonClicked(it)
+            (activity as? LoginRegisterActivity)?.handleBackAction(it)
         }
         return view
     }
@@ -59,48 +53,44 @@ class RegisterFragment : Fragment() {
         registerButton = view.findViewById(R.id.Register_button)
         name = view.findViewById(R.id.username_field)
 
-        setupListeners()
-
+        initializeRegisterListeners()
     }
 
-    private fun setupListeners() {
-        var authServer=AuthRepository.authRepository
-        var userServer=UserRepository.shared
+    private fun initializeRegisterListeners() {
+        var authServer = AuthRepository.authRepository
+        var userServer = UserRepository.shared
         registerButton.setOnClickListener {
-
             val email = emailField.text.toString()
             val password = passwordField.text.toString()
             val confirmPassword = confirmPasswordField.text.toString()
             val username = name.text.toString()
             if (password != confirmPassword) {
-                Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "The entered passwords do not match", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || username.isEmpty()) {
-                Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            authServer.registerUser(email, password) { success, error ->
+            authServer.createAccount(email, password) { success, error ->
                 if (success) {
-                    userServer.addUser(username,email){success,error->
+                    userServer.createUserProfile(username, email) { success, error ->
                         if (success) {
-                            Log.d("TAG", "User added to database")
+                            Log.d("TAG", "User profile created successfully in database")
                         } else {
                             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                         }
                     }
-                    (activity as? LoginRegisterActivity)?.navigateToHome()
-                    Log.d("TAG", "User registered successfully ")
+                    (activity as? LoginRegisterActivity)?.goToHomeScreen()
+                    Log.d("TAG", "Registration completed successfully")
                 } else {
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             RegisterFragment().apply {

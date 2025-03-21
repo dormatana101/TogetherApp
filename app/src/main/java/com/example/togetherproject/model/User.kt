@@ -5,7 +5,7 @@ import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class UserRepository  constructor() {
+class UserRepository constructor() {
     private val authRepo = AuthRepository.authRepository
     private val firestore = Firebase.firestore
     private val cloudinary = CloudinaryModel()
@@ -14,7 +14,7 @@ class UserRepository  constructor() {
         val shared = UserRepository()
     }
 
-    fun addUser(name: String, email: String, callback: (Boolean, String?) -> Unit) {
+    fun createUserProfile(name: String, email: String, callback: (Boolean, String?) -> Unit) {
         val user = hashMapOf(
             "name" to name,
             "email" to email
@@ -30,11 +30,11 @@ class UserRepository  constructor() {
             }
     }
 
-    fun fetchUser(callback: (Map<String, Any>?) -> Unit) {
-        val userEmail = authRepo.currentUser?.email
-        if (userEmail != null) {
+    fun retrieveUserData(callback: (Map<String, Any>?) -> Unit) {
+        val currentEmail = authRepo.currentUser?.email
+        if (currentEmail != null) {
             firestore.collection("users")
-                .whereEqualTo("email", userEmail)
+                .whereEqualTo("email", currentEmail)
                 .get()
                 .addOnSuccessListener { documents ->
                     if (!documents.isEmpty) {
@@ -52,7 +52,7 @@ class UserRepository  constructor() {
         }
     }
 
-    fun fetchUserByEmail(email: String, callback: (Map<String, Any>?) -> Unit) {
+    fun retrieveUserDataByEmail(email: String, callback: (Map<String, Any>?) -> Unit) {
         firestore.collection("users")
             .whereEqualTo("email", email)
             .get()
@@ -69,17 +69,17 @@ class UserRepository  constructor() {
             }
     }
 
-    fun fetchProfileImage(callback: (String?) -> Unit) {
-        fetchUser { user ->
+    fun getProfileImageUrl(callback: (String?) -> Unit) {
+        retrieveUserData { user ->
             callback(user?.get("image") as? String)
         }
     }
 
-    fun updateUser(name: String, password: String, image: Bitmap?, callback: (Boolean, String?) -> Unit) {
-        val userEmail = authRepo.currentUser?.email
-        if (userEmail != null) {
+    fun modifyUserProfile(name: String, password: String, image: Bitmap?, callback: (Boolean, String?) -> Unit) {
+        val currentEmail = authRepo.currentUser?.email
+        if (currentEmail != null) {
             firestore.collection("users")
-                .whereEqualTo("email", userEmail)
+                .whereEqualTo("email", currentEmail)
                 .get()
                 .addOnSuccessListener { documents ->
                     if (!documents.isEmpty) {
@@ -93,19 +93,19 @@ class UserRepository  constructor() {
                         if (name.isNotEmpty()) totalUpdates++
                         if (image != null) totalUpdates++
 
-                        fun checkCompletion() {
+                        fun verifyCompletion() {
                             if (updateCount == totalUpdates && !hasError) {
                                 callback(true, null)
                             } else if (hasError) {
-                                callback(false, "An error occurred while updating the profile.")
+                                callback(false, "Profile update encountered an error.")
                             }
                         }
 
                         if (password.isNotEmpty()) {
-                            authRepo.updatePassword(password) { success, _ ->
+                            authRepo.changePassword(password) { success, _ ->
                                 if (!success) hasError = true
                                 updateCount++
-                                checkCompletion()
+                                verifyCompletion()
                             }
                         }
 
@@ -113,50 +113,50 @@ class UserRepository  constructor() {
                             documentReference.update("name", name)
                                 .addOnSuccessListener {
                                     updateCount++
-                                    checkCompletion()
+                                    verifyCompletion()
                                 }
                                 .addOnFailureListener {
                                     hasError = true
                                     updateCount++
-                                    checkCompletion()
+                                    verifyCompletion()
                                 }
                         }
 
                         if (image != null) {
                             val previousImageUrl = userDocument.getString("image")
                             val uploadImage = { bitmap: Bitmap ->
-                                cloudinary.uploadImage(bitmap, authRepo.getCurrentUserEmail(), { uri ->
+                                cloudinary.sendImageToCloud(bitmap, authRepo.retrieveCurrentUserEmail(), { uri ->
                                     if (!uri.isNullOrBlank()) {
                                         documentReference.update("image", uri)
                                             .addOnSuccessListener {
                                                 updateCount++
-                                                checkCompletion()
+                                                verifyCompletion()
                                             }
                                             .addOnFailureListener {
                                                 hasError = true
                                                 updateCount++
-                                                checkCompletion()
+                                                verifyCompletion()
                                             }
                                     } else {
                                         hasError = true
                                         updateCount++
-                                        checkCompletion()
+                                        verifyCompletion()
                                     }
                                 }, {
                                     hasError = true
                                     updateCount++
-                                    checkCompletion()
+                                    verifyCompletion()
                                 })
                             }
 
                             if (!previousImageUrl.isNullOrEmpty()) {
-                                cloudinary.deleteImage(previousImageUrl) { deleteSuccess, _ ->
+                                cloudinary.removeImageFromCloud(previousImageUrl) { deleteSuccess, _ ->
                                     if (deleteSuccess) {
                                         uploadImage(image)
                                     } else {
                                         hasError = true
                                         updateCount++
-                                        checkCompletion()
+                                        verifyCompletion()
                                     }
                                 }
                             } else {
@@ -165,17 +165,17 @@ class UserRepository  constructor() {
                         }
 
                         if (totalUpdates == 0) {
-                            callback(false, "No changes were made")
+                            callback(false, "No modifications were detected")
                         }
                     } else {
-                        callback(false, "User not found")
+                        callback(false, "User profile not found")
                     }
                 }
                 .addOnFailureListener { e ->
                     callback(false, e.localizedMessage)
                 }
         } else {
-            callback(false, "User email is null")
+            callback(false, "Current user email is missing")
         }
     }
 }

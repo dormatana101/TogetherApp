@@ -2,9 +2,6 @@ package com.example.togetherproject.model
 
 import android.graphics.Bitmap
 import android.util.Log
-import com.example.togetherproject.model.AuthRepository
-import com.example.togetherproject.model.CloudinaryModel
-import com.example.togetherproject.model.UserRepository
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -30,12 +27,12 @@ class Model private constructor() {
     }
 
     init {
-        fetchPosts { retrievedPosts ->
+        retrievePosts { retrievedPosts ->
             postList = retrievedPosts
         }
     }
 
-    fun createPost(email: String, image: Bitmap?, content: String, callback: (Boolean, String?) -> Unit) {
+    fun publishPost(email: String, image: Bitmap?, content: String, callback: (Boolean, String?) -> Unit) {
         val post = hashMapOf(
             "email" to email,
             "content" to content,
@@ -47,9 +44,9 @@ class Model private constructor() {
             .add(post)
             .addOnSuccessListener { documentReference ->
                 image?.let {
-                    Log.d("Firestore", "Image upload started")
-                    uploadImage(it, documentReference.id, { uri ->
-                        Log.d("Firestore", "Image upload completed")
+                    Log.d("Firestore", "Image transmission initiated")
+                    transmitImage(it, documentReference.id, { uri ->
+                        Log.d("Firestore", "Image transmission successful")
                         if (!uri.isNullOrBlank()) {
                             firestore.collection("posts").document(documentReference.id)
                                 .update("imageUrl", uri)
@@ -60,8 +57,8 @@ class Model private constructor() {
                                     callback(false, e.localizedMessage)
                                 }
                         } else {
-                            Log.d("Firestore", "Image upload failed")
-                            callback(false, "Image upload failed")
+                            Log.d("Firestore", "Image transmission failed")
+                            callback(false, "Image transmission failed")
                         }
                     }, { error ->
                         callback(false, error)
@@ -69,16 +66,16 @@ class Model private constructor() {
                 } ?: callback(true, null)
             }
             .addOnFailureListener { e ->
-                Log.e("Firestore", "Error adding post", e)
+                Log.e("Firestore", "Error while publishing post", e)
                 callback(false, e.localizedMessage)
             }
     }
 
-    private fun uploadImage(bitmap: Bitmap, name: String, onSuccess: (String?) -> Unit, onError: (String?) -> Unit) {
-        cloudinary.uploadImage(bitmap, name, onSuccess, onError)
+    private fun transmitImage(bitmap: Bitmap, name: String, onSuccess: (String?) -> Unit, onError: (String?) -> Unit) {
+        cloudinary.sendImageToCloud(bitmap, name, onSuccess, onError)
     }
 
-    fun fetchPosts(callback: (MutableList<Post>) -> Unit) {
+    fun retrievePosts(callback: (MutableList<Post>) -> Unit) {
         firestore.collection("posts")
             .get()
             .addOnSuccessListener { documents ->
@@ -92,7 +89,7 @@ class Model private constructor() {
 
                 for (document in documents) {
                     val email = document.getString("email") ?: "email"
-                    userRepo.fetchUserByEmail(email) { user ->
+                    userRepo.retrieveUserDataByEmail(email) { user ->
                         val post = Post(
                             id = document.id,
                             name = user?.get("name") as? String ?: "name",
@@ -106,20 +103,20 @@ class Model private constructor() {
 
                         if (pendingCallbacks == 0) {
                             posts.sortByDescending { it.timestamp }
-                            Log.d("Firestore", "Successfully fetched ${posts.size} posts.")
+                            Log.d("Firestore", "Successfully retrieved ${posts.size} posts.")
                             callback(posts)
                         }
                     }
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("Firestore", "Error fetching posts", e)
+                Log.e("Firestore", "Error retrieving posts", e)
                 callback(mutableListOf())
             }
     }
 
-    fun fetchUserPosts(callback: (MutableList<Post>) -> Unit) {
-        val email = authRepo.getCurrentUserEmail()
+    fun retrieveUserPosts(callback: (MutableList<Post>) -> Unit) {
+        val email = authRepo.retrieveCurrentUserEmail()
 
         firestore.collection("posts")
             .whereEqualTo("email", email)
@@ -134,7 +131,7 @@ class Model private constructor() {
                 }
 
                 for (document in documents) {
-                    userRepo.fetchUserByEmail(email) { user ->
+                    userRepo.retrieveUserDataByEmail(email) { user ->
                         val post = Post(
                             id = document.id,
                             name = user?.get("name") as? String ?: "name",
@@ -148,25 +145,25 @@ class Model private constructor() {
 
                         if (pendingCallbacks == 0) {
                             posts.sortByDescending { it.timestamp }
-                            Log.d("Firestore", "Successfully fetched ${posts.size} posts.")
+                            Log.d("Firestore", "Successfully retrieved ${posts.size} posts.")
                             callback(posts)
                         }
                     }
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("Firestore", "Error fetching posts", e)
+                Log.e("Firestore", "Error retrieving posts", e)
                 callback(mutableListOf())
             }
     }
 
-    fun fetchPostById(postId: String, callback: (Post?) -> Unit) {
+    fun getPostById(postId: String, callback: (Post?) -> Unit) {
         firestore.collection("posts").document(postId)
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val email = document.getString("email") ?: "email"
-                    userRepo.fetchUserByEmail(email) { user ->
+                    userRepo.retrieveUserDataByEmail(email) { user ->
                         val post = Post(
                             id = document.id,
                             name = user?.get("name") as? String ?: "name",
@@ -182,12 +179,12 @@ class Model private constructor() {
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("Firestore", "Error getting post by ID", e)
+                Log.e("Firestore", "Error retrieving post by ID", e)
                 callback(null)
             }
     }
 
-    fun updatePost(postId: String, image: Bitmap?, content: String, callback: (Boolean, String?) -> Unit) {
+    fun modifyPost(postId: String, image: Bitmap?, content: String, callback: (Boolean, String?) -> Unit) {
         val post = hashMapOf(
             "content" to content,
             "imageUrl" to ""
@@ -197,9 +194,9 @@ class Model private constructor() {
             .update(post as Map<String, Any>)
             .addOnSuccessListener {
                 image?.let {
-                    Log.d("Firestore", "Image upload started")
-                    uploadImage(it, postId, { uri ->
-                        Log.d("Firestore", "Image upload completed")
+                    Log.d("Firestore", "Image transmission initiated")
+                    transmitImage(it, postId, { uri ->
+                        Log.d("Firestore", "Image transmission successful")
                         if (!uri.isNullOrBlank()) {
                             firestore.collection("posts").document(postId)
                                 .update("imageUrl", uri)
@@ -210,8 +207,8 @@ class Model private constructor() {
                                     callback(false, e.localizedMessage)
                                 }
                         } else {
-                            Log.d("Firestore", "Image upload failed")
-                            callback(false, "Image upload failed")
+                            Log.d("Firestore", "Image transmission failed")
+                            callback(false, "Image transmission failed")
                         }
                     }, { error ->
                         callback(false, error)
@@ -219,12 +216,12 @@ class Model private constructor() {
                 } ?: callback(true, null)
             }
             .addOnFailureListener { e ->
-                Log.e("Firestore", "Error updating post", e)
+                Log.e("Firestore", "Error modifying post", e)
                 callback(false, e.localizedMessage)
             }
     }
 
-    fun removePost(postId: String, callback: (Boolean, String?) -> Unit) {
+    fun deletePost(postId: String, callback: (Boolean, String?) -> Unit) {
         firestore.collection("posts").document(postId)
             .delete()
             .addOnSuccessListener {

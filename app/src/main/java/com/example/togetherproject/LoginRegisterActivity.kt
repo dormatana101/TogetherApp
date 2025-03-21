@@ -1,4 +1,5 @@
 package com.example.togetherproject
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,18 +11,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.togetherproject.model.AuthRepository
 
-
 class LoginRegisterActivity : AppCompatActivity() {
-    var authServer=AuthRepository.authRepository
+    var authServer = AuthRepository.authRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
-            if (authServer.isUserLoggedIn()) {
-                navigateToHome()
+            if (authServer.checkUserLoggedIn()) {
+                goToHomeScreen()
                 return
             }
-
-
             enableEdgeToEdge()
             setContentView(R.layout.activity_login_register)
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -29,7 +27,7 @@ class LoginRegisterActivity : AppCompatActivity() {
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
             }
-                 supportFragmentManager.beginTransaction().apply {
+            supportFragmentManager.beginTransaction().apply {
                 replace(R.id.fragment_container, loginFragment())
                 commit()
             }
@@ -38,31 +36,24 @@ class LoginRegisterActivity : AppCompatActivity() {
         }
     }
 
-
-    fun onNewMemberClicked(view: View) {
-        Log.d("TAG", "This is a debug message")
-        // Replace the login fragment with the register fragment
-
-             supportFragmentManager.beginTransaction().apply {
-                 replace(R.id.fragment_container, RegisterFragment())
-                 commit()
-             }
-
-
+    fun handleNewMemberAction(view: View) {
+        Log.d("TAG", "Debug: switching to registration view")
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_container, RegisterFragment())
+            commit()
+        }
     }
-    fun onBackButtonClicked(view: View) {
-        // Replace the register fragment with the login fragment
+    fun handleBackAction(view: View) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, loginFragment())
             commit()
         }
     }
 
-    fun navigateToHome() {
+    fun goToHomeScreen() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()
     }
-
 }

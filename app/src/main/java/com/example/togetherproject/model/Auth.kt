@@ -7,10 +7,10 @@ class AuthRepository private constructor() {
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-     val currentUser: FirebaseUser?
+    val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
 
-    fun registerUser(email: String, password: String, callback: (Boolean, String?) -> Unit) {
+    fun createAccount(email: String, password: String, callback: (Boolean, String?) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -21,22 +21,22 @@ class AuthRepository private constructor() {
             }
     }
 
-    fun loginUser(email: String, password: String, callback: (Boolean, String?) -> Unit) {
+    fun signInUser(email: String, password: String, callback: (Boolean, String?) -> Unit) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     callback(true, null)
                 } else {
-                    callback(false, "Password or email is incorrect")
+                    callback(false, "Incorrect email or password")
                 }
             }
     }
 
-    fun signOutUser() {
+    fun logOutUser() {
         firebaseAuth.signOut()
     }
 
-    fun updatePassword(newPassword: String, callback: (Boolean, String?) -> Unit) {
+    fun changePassword(newPassword: String, callback: (Boolean, String?) -> Unit) {
         val user = firebaseAuth.currentUser
         user?.updatePassword(newPassword)
             ?.addOnCompleteListener { task ->
@@ -48,15 +48,15 @@ class AuthRepository private constructor() {
             }
     }
 
-    fun isUserLoggedIn(): Boolean {
+    fun checkUserLoggedIn(): Boolean {
         return currentUser != null
     }
 
-    fun getCurrentUserEmail(): String {
+    fun retrieveCurrentUserEmail(): String {
         return currentUser?.email.orEmpty()
     }
 
     companion object {
-        val authRepository =AuthRepository()
+        val authRepository = AuthRepository()
     }
 }
