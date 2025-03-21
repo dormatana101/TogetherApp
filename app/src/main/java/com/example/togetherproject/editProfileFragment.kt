@@ -109,7 +109,8 @@ class editProfileFragment : Fragment() {
                 ) { success, error ->
                     if (success) {
                         Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT).show()
-                        (activity as? MainActivity)?.switchFragment(myProfileFragment.newInstance("", ""))
+                        (activity as? MainActivity)?.updateProfileData()
+                        (activity as? MainActivity)?.handleProfileClick()
                     } else {
                         Toast.makeText(context, "Update error: $error", Toast.LENGTH_SHORT).show()
                     }
