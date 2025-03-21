@@ -10,8 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.togetherproject.model.AuthRepository
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.firebase.auth.FirebaseAuth
 
 private const val param1 = "param1"
 private const val param2 = "param2"
@@ -65,7 +63,7 @@ class loginFragment : Fragment() {
             }
             server.signInUser(email, password) { success, error ->
                 if (success) {
-                    Toast.makeText(requireContext(), "Sign in succeeded", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Sign in succeeded", Toast.LENGTH_SHORT).show()
                     (activity as? LoginRegisterActivity)?.goToHomeScreen()
                 } else {
                     Toast.makeText(requireContext(), error ?: "Sign in unsuccessful", Toast.LENGTH_SHORT).show()
