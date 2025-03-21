@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.togetherproject.model.UserRepository
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
@@ -24,7 +25,7 @@ class myProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_my_profile, container, false)
-        val editButton: TextView = view.findViewById(R.id.editButton)
+        val editButton: FloatingActionButton = view.findViewById(R.id.editButton)
         editButton.setOnClickListener {
             (activity as? MainActivity)?.handleEditProfileClick()
         }
