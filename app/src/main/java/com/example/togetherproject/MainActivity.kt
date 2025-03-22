@@ -154,7 +154,13 @@ class MainActivity : AppCompatActivity() {
     fun setLoading(isLoading: Boolean) {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
-
+    fun editPost(postId: String?) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_container, addPostFragment.newInstance(true, postId))
+            addToBackStack(null)
+            commit()
+        }
+    }
     fun redirectToLogin() {
         val intent = Intent(this, LoginRegisterActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

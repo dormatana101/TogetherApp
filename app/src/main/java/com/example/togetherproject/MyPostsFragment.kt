@@ -1,5 +1,6 @@
 package com.example.togetherproject
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,13 +20,17 @@ import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import java.text.SimpleDateFormat
 import java.util.Locale
+import com.example.togetherproject.FeedFragment
+import com.example.togetherproject.base.MyApplication.Globals.context
 
-class PostsViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
+class MyPostsViewHolder (itemView: View, private val onEditClick: (String) -> Unit): RecyclerView.ViewHolder(itemView) {
     var profileNameTextView: TextView? = null
     var postTextView: TextView? = null
     var imageProfile: ImageView? = null
     var dateTextView: TextView? = null
     var imagePost: ImageView? = null
+    var editButton: ImageView? = null
+    var deleteButton: ImageView? = null
 
 
 
@@ -35,32 +41,17 @@ class PostsViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
         dateTextView = itemView.findViewById(R.id.postDate)
         imagePost = itemView.findViewById(R.id.imagePost)
         imageProfile = itemView.findViewById(R.id.ProfileImage)
+        editButton=itemView.findViewById(R.id.editPostIcon)
+        deleteButton=itemView.findViewById(R.id.deletePostIcon)
 
     }
-    /*itemView.setOnClickListener{
-            adapterPosition
-        }
-        itemView.findViewById<View>(R.id.student_row).setOnClickListener {
-            val intent = Intent(itemView.context, StudentDetailsActivity::class.java).apply {
-                putExtra("STUDENT_ID", student?.id)
-                putExtra("STUDENT_NAME", student?.name)
-                putExtra("STUDENT_ADDRESS", student?.address)
-                putExtra("STUDENT_PHONE", student?.phone)
-                putExtra("STUDENT_IS_CHECKED", student?.isChecked)
-                putExtra("STUDENT_INDEX", adapterPosition)
-            }
-            itemView.context.startActivity(intent)
-        }
-*/
-
-
     fun bind(post: Post) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         profileNameTextView?.text = post.name
         postTextView?.text = post.content
         dateTextView?.text = dateFormat.format(post.timestamp)
 
-       // Picasso.get().load(uri).into(profileImage)
+        // Picasso.get().load(uri).into(profileImage)
         if(post.profileImage != "image") {
             try {
                 Picasso.get()
@@ -88,13 +79,38 @@ class PostsViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
         //val resourceId = itemView.context.resources.getIdentifier(post.imagePost, "drawable", itemView.context.packageName)
         //imagePost?.setImageResource(resourceId)
 
+        editButton?.setOnClickListener(){
+            onEditClick(post.id)
+        }
+        deleteButton?.setOnClickListener {
+            AlertDialog.Builder(itemView.context)
+                .setTitle("Delete Post")
+                .setMessage("Are you sure you want to delete this post?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    Model.instance.deletePost(post.id) { success, error ->
+                        if (success) {
+                            Toast.makeText(context, "Your post was deleted successfully!", Toast.LENGTH_LONG).show()
+                            (itemView.context as? MainActivity)?.handleMyPostsClick()
+                        } else {
+                            Toast.makeText(context, "Connection failed", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+
 
 
     }
 
+
 }
 
-class PostRecycleAdapter(private var posts : List<Post>?): RecyclerView.Adapter<PostsViewHolder>() {
+class MyPostRecycleAdapter(private var posts : List<Post>?, private val onEditClick: (String) -> Unit): RecyclerView.Adapter<MyPostsViewHolder>() {
     override fun getItemCount(): Int {
         return posts?.size ?: 0
     }
@@ -102,14 +118,15 @@ class PostRecycleAdapter(private var posts : List<Post>?): RecyclerView.Adapter<
         posts = _posts
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPostsViewHolder {
         val inflation=LayoutInflater.from(parent.context)
-        val view = inflation.inflate(R.layout.post_row, parent, false)
-        return PostsViewHolder(view);
+        val view = inflation.inflate(R.layout.my_post_row, parent, false)
+
+        return MyPostsViewHolder(view, onEditClick);
     }
 
 
-    override fun onBindViewHolder(holder: PostsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyPostsViewHolder, position: Int) {
         holder.bind(posts?.get(position) ?: return)
     }
 
@@ -117,54 +134,61 @@ class PostRecycleAdapter(private var posts : List<Post>?): RecyclerView.Adapter<
 }
 
 
-class FeedFragment : Fragment() {
-    //var adapter: PostRecycleAdapter? = null
-    var adapter = PostRecycleAdapter(Model.instance.postList)
+
+
+class MyPostsFragment : Fragment() {
+    var adapter: MyPostRecycleAdapter? = null
     var posts: MutableList<Post> = ArrayList()
     private lateinit var progressBar: ProgressBar
-    private lateinit var  recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_feed, container, false)
-
         progressBar = view.findViewById(R.id.feedProgressBar)
-
-        posts = Model.instance.postList
-
         recyclerView = view.findViewById(R.id.fragment_feed_recycler_view)
+
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+        posts = Model.instance.postList
         recyclerView.setHasFixedSize(true)
 
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        adapter = PostRecycleAdapter(posts)
+        adapter = MyPostRecycleAdapter(posts){postId->
+            editPostButtonClicked(postId)
+        }
         recyclerView.adapter = adapter
-        getAllPosts()
+        getMyPosts()
+
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        getAllPosts()
+       // progressBar.visibility = View.VISIBLE
+        //recyclerView.visibility = View.GONE
+        getMyPosts()
 
     }
+    fun editPostButtonClicked(postId: String?) {
+        (activity as? MainActivity)?.editPost(postId)
+    }
 
-    private fun getAllPosts() {
+    private fun getMyPosts() {
 
-        Model.instance.retrievePosts { fetchedPosts ->
-
+        Model.instance.retrieveUserPosts { fetchedPosts ->
+            // Ensure posts are updated only after fetching data from the database
             posts.clear()
             posts.addAll(fetchedPosts)
 
             adapter?.set(posts)
             adapter?.notifyDataSetChanged()
-            progressBar.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+            //progressBar.visibility = View.GONE
+           // recyclerView.visibility = View.VISIBLE
         }
     }
 }

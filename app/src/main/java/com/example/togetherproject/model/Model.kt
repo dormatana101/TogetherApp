@@ -13,7 +13,17 @@ data class Post(
     var imageUrl: String,
     var timestamp: java.util.Date,
 )
+/*
+data class Post(
+    val postId: String,
+    val profileName: String,
+    var ProfileImage: String,
+    var textPost: String,
+    var imagePost: String,
+    var date: java.util.Date,
 
+    )
+ */
 class Model private constructor() {
     private val firestore = Firebase.firestore
     @Volatile
