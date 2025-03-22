@@ -21,11 +21,15 @@ class MainActivity : AppCompatActivity() {
     private var userEmail: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, FeedFragment())
+                .commit()
+        }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-                                if (currentFragment !is FeedFragment) {
+                if (currentFragment !is FeedFragment) {
                                     handleHomeClick()
                                 } else {
                                     finishAffinity()
