@@ -121,6 +121,8 @@ class FeedFragment : Fragment() {
     //var adapter: PostRecycleAdapter? = null
     var adapter = PostRecycleAdapter(Model.instance.postList)
     var posts: MutableList<Post> = ArrayList()
+    private lateinit var emptyView: TextView
+
     private lateinit var progressBar: ProgressBar
     private lateinit var  recyclerView: RecyclerView
     override fun onCreateView(
@@ -133,6 +135,7 @@ class FeedFragment : Fragment() {
         progressBar = view.findViewById(R.id.feedProgressBar)
 
         posts = Model.instance.postList
+        emptyView = view.findViewById(R.id.emptyView)
 
         recyclerView = view.findViewById(R.id.fragment_feed_recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -155,16 +158,26 @@ class FeedFragment : Fragment() {
     }
 
     private fun getAllPosts() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        emptyView.visibility = View.GONE
 
         Model.instance.retrievePosts { fetchedPosts ->
-
             posts.clear()
             posts.addAll(fetchedPosts)
 
             adapter?.set(posts)
             adapter?.notifyDataSetChanged()
+
             progressBar.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+
+            if (posts.isEmpty()) {
+                emptyView.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            } else {
+                emptyView.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
         }
     }
 }

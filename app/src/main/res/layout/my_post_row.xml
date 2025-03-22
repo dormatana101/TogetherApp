@@ -9,7 +9,7 @@
     app:cardElevation="4dp"
     android:clipToPadding="false"
     android:layoutDirection="ltr"
-    android:backgroundTint="#F5F5F5"> <!-- קובע שהעיצוב תמיד יהיה שמאל לימין -->
+    android:backgroundTint="#F5F5F5">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
