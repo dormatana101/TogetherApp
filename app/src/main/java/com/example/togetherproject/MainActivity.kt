@@ -25,11 +25,11 @@ class MainActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-                //                if (currentFragment !is FeedFragment) {
-                //                    handleHomeClick()
-                //                } else {
-                //                    finishAffinity()
-                //                }
+                                if (currentFragment !is FeedFragment) {
+                                    handleHomeClick()
+                                } else {
+                                    finishAffinity()
+                                }
             }
         })
 
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     fun handleMyPostsClick() {
         supportFragmentManager.beginTransaction().apply {
-            //replace(R.id.fragment_container, MyPostsFragment())
+            replace(R.id.fragment_container, MyPostsFragment())
             addToBackStack(null)
             commit()
         }
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     fun handleArticlesClick() {
         supportFragmentManager.beginTransaction().apply {
-            //replace(R.id.fragment_container, articlesFragment())
+            replace(R.id.fragment_container, articlesFragment())
             addToBackStack(null)
             commit()
         }
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
     fun handleAddPostClick(isEdit: Boolean, postId: String?) {
         supportFragmentManager.beginTransaction().apply {
-            //replace(R.id.fragment_container, addPostFragment.newInstance(isEdit, postId))
+            replace(R.id.fragment_container, addPostFragment.newInstance(isEdit, postId))
             addToBackStack(null)
             commit()
         }
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     fun handleHomeClick() {
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.beginTransaction().apply {
-            //replace(R.id.fragment_container, FeedFragment())
+            replace(R.id.fragment_container, FeedFragment())
             commit()
         }
     }
