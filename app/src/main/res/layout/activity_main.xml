@@ -100,7 +100,6 @@
             android:maxWidth="40dp" />
     </LinearLayout>
 
-    <!-- Добавленный ProgressBar для обработки showLoading() -->
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleLarge"

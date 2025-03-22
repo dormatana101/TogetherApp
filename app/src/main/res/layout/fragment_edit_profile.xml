@@ -7,7 +7,6 @@
     android:background="?android:colorBackground"
     android:padding="16dp">
 
-    <!-- כותרת / Заголовок -->
     <TextView
         android:id="@+id/profileTitle"
         android:layout_width="0dp"
@@ -21,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- תמונת פרופיל / Изображение профиля -->
     <FrameLayout
         android:id="@+id/profileImageContainer"
         android:layout_width="120dp"
@@ -39,7 +37,6 @@
             android:scaleType="centerCrop"
             android:background="@drawable/circle_background" />
 
-        <!-- אייקון עריכה / Иконка редактирования -->
         <ImageView
             android:id="@+id/editIcon"
             android:layout_width="32dp"
@@ -51,7 +48,6 @@
             android:src="@drawable/account_edit_outline" />
     </FrameLayout>
 
-    <!-- שם / Имя (Label) -->
     <TextView
         android:id="@+id/nameLabel"
         android:layout_width="0dp"
@@ -64,7 +60,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"/>
 
-    <!-- Input для שם / Ввод имени -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -86,7 +81,6 @@
             android:hint="Name" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- סיסמה / Пароль (Label) -->
     <TextView
         android:id="@+id/passwordLabel"
         android:layout_width="0dp"
@@ -99,7 +93,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- Input для סיסמה / Ввод пароля -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -134,7 +127,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
-    <!-- Input для אימות סיסמה / Ввод подтверждения пароля -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/confirmPasswordInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -157,9 +149,7 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- כפתור שמירה / Кнопка Save -->
 
-    <!-- כפתור ביטול / Кнопка Cancel -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/saveButton"
         style="@style/Widget.MaterialComponents.Button"

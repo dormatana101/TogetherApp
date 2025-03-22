@@ -19,14 +19,14 @@
             android:textColor="@android:color/darker_gray"
             android:layout_gravity="center"
             android:visibility="gone" />
-        <!-- RecyclerView -->
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_feed_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <!-- Centered ProgressBar -->
         <ProgressBar
             android:id="@+id/feedProgressBar"
             android:layout_width="wrap_content"
@@ -35,7 +35,6 @@
             android:visibility="gone"
             style="?android:attr/progressBarStyleLarge" />
 
-        <!-- Кнопка создания поста, расположенная в правом нижнем углу -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_create_post"
             android:layout_width="wrap_content"

@@ -51,7 +51,6 @@ class MyPostsViewHolder (itemView: View, private val onEditClick: (String) -> Un
         postTextView?.text = post.content
         dateTextView?.text = dateFormat.format(post.timestamp)
 
-        // Picasso.get().load(uri).into(profileImage)
         if(post.profileImage != "image") {
             try {
                 Picasso.get()
@@ -60,8 +59,7 @@ class MyPostsViewHolder (itemView: View, private val onEditClick: (String) -> Un
                     .into(imageProfile)
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Handle the error, e.g., set a placeholder image
-                //imagePost!!.setImageResource(R.drawable.image)
+
             }
         }
 
@@ -72,12 +70,9 @@ class MyPostsViewHolder (itemView: View, private val onEditClick: (String) -> Un
             } catch (e: Exception) {
                 imagePost?.visibility = View.GONE
                 e.printStackTrace()
-                // Handle the error, e.g., set a placeholder image
-                //imagePost!!.setImageResource(R.drawable.image)
+
             }
         }
-        //val resourceId = itemView.context.resources.getIdentifier(post.imagePost, "drawable", itemView.context.packageName)
-        //imagePost?.setImageResource(resourceId)
 
         editButton?.setOnClickListener(){
             onEditClick(post.id)
@@ -87,7 +82,7 @@ class MyPostsViewHolder (itemView: View, private val onEditClick: (String) -> Un
                 .setTitle("Delete Post")
                 .setMessage("Are you sure you want to delete this post?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                    Model.instance.deletePost(post.id) { success, error ->
+                    Model.instance.deletePost(post.id) { success, _ ->
                         if (success) {
                             Toast.makeText(context, "Your post was deleted successfully!", Toast.LENGTH_LONG).show()
                             (itemView.context as? MainActivity)?.handleMyPostsClick()
@@ -172,8 +167,6 @@ class MyPostsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-       // progressBar.visibility = View.VISIBLE
-        //recyclerView.visibility = View.GONE
         getMyPosts()
 
     }
@@ -184,14 +177,11 @@ class MyPostsFragment : Fragment() {
     private fun getMyPosts() {
 
         Model.instance.retrieveUserPosts { fetchedPosts ->
-            // Ensure posts are updated only after fetching data from the database
             posts.clear()
             posts.addAll(fetchedPosts)
 
             adapter?.set(posts)
             adapter?.notifyDataSetChanged()
-            //progressBar.visibility = View.GONE
-           // recyclerView.visibility = View.VISIBLE
         }
     }
 }

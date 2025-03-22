@@ -16,7 +16,8 @@ private const val Parameter_1 = "param1"
 private const val Parameter_2 = "param2"
 
 class RegisterFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
+
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var emailField: TextView

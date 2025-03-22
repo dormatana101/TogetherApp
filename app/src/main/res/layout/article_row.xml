@@ -17,9 +17,8 @@
         android:gravity="start"
         android:layoutDirection="ltr"
         android:orientation="horizontal"
-        android:padding="12dp"> <!-- Auto-adjusts for light/dark mode -->
+        android:padding="12dp">
 
-        <!-- PTSD Logo or Article Image -->
         <ImageView
             android:id="@+id/articleImage"
             android:layout_width="50dp"

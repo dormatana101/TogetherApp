@@ -78,7 +78,7 @@ class CloudinaryModel {
         }.start()
     }
 
-    fun getCloudPublicId(url: String): String {
+    private fun getCloudPublicId(url: String): String {
         val afterUpload = url.substringAfter("upload/")
         val afterVersion = afterUpload.substringAfter("/")
         return afterVersion.substringBeforeLast(".")
