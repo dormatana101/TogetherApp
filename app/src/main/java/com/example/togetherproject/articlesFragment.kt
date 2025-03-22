@@ -171,7 +171,7 @@ class articlesFragment : Fragment() {
                 recyclerView.visibility = View.GONE
                 val client = OkHttpClient()
                 val request = Request.Builder()
-                    .url("https://newsapi.org/v2/everything?q=mental%20health%20post%20trauma%20PTSD&sortBy=publishedAt&apiKey=c0bc1b71338248b387ab4a5e3cf5268c")
+                    .url("https://newsapi.org/v2/everything?q=holocaust + volunteer&language=en&sortBy=publishedAt&apiKey=c0bc1b71338248b387ab4a5e3cf5268c")
                     .build()
 
                 val response = client.newCall(request).execute()
