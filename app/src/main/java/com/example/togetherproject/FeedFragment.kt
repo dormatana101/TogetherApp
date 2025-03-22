@@ -113,7 +113,7 @@ class FeedFragment : Fragment() {
 
         progressBar = view.findViewById(R.id.feedProgressBar)
 
-        posts = Model.instance.postList
+        posts =  mutableListOf()
         emptyView = view.findViewById(R.id.emptyView)
 
         recyclerView = view.findViewById(R.id.fragment_feed_recycler_view)
