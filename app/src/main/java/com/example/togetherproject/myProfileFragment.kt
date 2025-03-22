@@ -56,8 +56,12 @@ class myProfileFragment : Fragment() {
         }
         val profileName = view.findViewById<TextView>(R.id.profileName)
         val profileEmail=view.findViewById<TextView>(R.id.profileEmail)
-        profileName.text = (activity as? MainActivity)?.retrieveUserName()
-        profileEmail.text = (activity as? MainActivity)?.retrieveUserEmail()
+        UserRepository.shared.retrieveUserData { user ->
+            if (user != null) {
+                profileName.text = user["name"].toString()
+                profileEmail.text = user["email"].toString()
+            }
+        }
 
 
         return view
