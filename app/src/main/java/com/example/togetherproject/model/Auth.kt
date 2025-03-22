@@ -3,7 +3,7 @@ package com.example.togetherproject.model
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
-class AuthRepository private constructor() {
+class AuthRepository {
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 

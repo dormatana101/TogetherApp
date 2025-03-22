@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import com.example.togetherproject.model.AuthRepository
 import com.example.togetherproject.model.UserRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
@@ -45,17 +47,18 @@ class myProfileFragment : Fragment() {
             profileImage.visibility = View.VISIBLE
         }
 
-        val logOutbtn = view.findViewById<Button>(R.id.logoutButton)
+        val logOutbtn=view.findViewById<Button>(R.id.logoutButton)
+        val authServer=AuthRepository.authRepository
         logOutbtn.setOnClickListener {
+            authServer.logOutUser()
+            Toast.makeText(context,"You logged out, have a great day", Toast.LENGTH_LONG).show()
             (activity as? MainActivity)?.redirectToLogin()
         }
+        val profileName = view.findViewById<TextView>(R.id.profileName)
+        val profileEmail=view.findViewById<TextView>(R.id.profileEmail)
+        profileName.text = (activity as? MainActivity)?.retrieveUserName()
+        profileEmail.text = (activity as? MainActivity)?.retrieveUserEmail()
 
-        UserRepository.shared.retrieveUserData { user ->
-            if (user != null) {
-                profileNameText.text = user["name"].toString()
-                profileEmailText.text = user["email"].toString()
-            }
-        }
 
         return view
     }
