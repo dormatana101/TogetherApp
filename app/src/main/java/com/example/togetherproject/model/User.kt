@@ -73,7 +73,16 @@ class UserRepository constructor() {
             callback(user?.get("image") as? String)
         }
     }
-
+    fun getProfileImage(onComplete: (String?) -> Unit) {
+        retrieveUserData { user ->
+            if (user != null) {
+                val image = user["image"] as? String
+                onComplete(image)
+            } else {
+                onComplete(null)
+            }
+        }
+    }
     fun modifyUserProfile(name: String, password: String, image: Bitmap?, callback: (Boolean, String?) -> Unit) {
         val currentEmail = authRepo.currentUser?.email
         if (currentEmail != null) {

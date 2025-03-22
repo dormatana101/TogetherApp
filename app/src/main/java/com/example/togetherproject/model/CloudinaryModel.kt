@@ -33,11 +33,9 @@ class CloudinaryModel {
             .option("folder", "images")
             .callback(object : UploadCallback {
                 override fun onStart(requestId: String?) {
-                    // Начало загрузки – можно добавить дополнительное логирование
                 }
 
                 override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
-                    // Обновление прогресса (при необходимости)
                 }
 
                 override fun onSuccess(requestId: String?, resultData: Map<*, *>) {
@@ -50,7 +48,6 @@ class CloudinaryModel {
                 }
 
                 override fun onReschedule(requestId: String?, error: ErrorInfo?) {
-                    // Обработка переноса загрузки (если требуется)
                 }
             })
             .dispatch()

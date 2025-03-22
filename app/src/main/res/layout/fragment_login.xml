@@ -81,10 +81,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:gravity="start"
         android:text="new member?"
         android:textAlignment="viewStart"
-        android:gravity="start"
-        android:textColor="#4285F4"
+        android:textColor="#6FB0EB"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/password_field"
         app:layout_constraintTop_toBottomOf="@id/password_field" />
@@ -97,7 +97,7 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="48dp"
-        android:backgroundTint="#82D6ED"
+        android:backgroundTint="#169ABF"
         android:text="Login"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
@@ -106,19 +106,6 @@
         app:layout_constraintTop_toBottomOf="@id/new_member_link" />
 
     <!-- Or Login With Separator -->
-    <TextView
-        android:id="@+id/or_login_with"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="or login with"
-        android:textAlignment="viewStart"
-        android:gravity="start"
-        android:textColor="#808080"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_button" />
 
     <!-- Social Login Buttons -->
     <LinearLayout
@@ -126,47 +113,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="start"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/or_login_with">
-
-        <Button
-            android:id="@+id/google_login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft='@drawable/google'
-            android:drawablePadding="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#DB4437"
-            android:text="Google"
-            android:textAlignment="viewStart"
-            android:gravity="start"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/facebook_login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft='@drawable/facebook'
-            android:drawablePadding="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#4267B2"
-            android:text="Facebook"
-            android:textAlignment="viewStart"
-            android:gravity="start"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
