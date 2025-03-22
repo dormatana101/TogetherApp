@@ -163,7 +163,10 @@ class MyPostsFragment : Fragment() {
         }
         recyclerView.adapter = adapter
         getMyPosts()
-
+        val fabCreatePost = view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab_create_post)
+        fabCreatePost.setOnClickListener {
+            (activity as? MainActivity)?.handleAddPostClick(false, null)
+        }
         return view
     }
 

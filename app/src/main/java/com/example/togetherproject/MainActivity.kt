@@ -46,10 +46,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val addPostButton = findViewById<ImageView>(R.id.add_icon)
-        addPostButton.setOnClickListener {
-            handleAddPostClick(false, null)
-        }
+//        val addPostButton = findViewById<ImageView>(R.id.add_icon)
+//        addPostButton.setOnClickListener {
+//            handleAddPostClick(false, null)
+//        }
 
         val homePageButton = findViewById<ImageView>(R.id.home_icon)
         homePageButton.setOnClickListener {

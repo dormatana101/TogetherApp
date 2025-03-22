@@ -1,5 +1,6 @@
 package com.example.togetherproject
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ class myProfileFragment : Fragment() {
     private lateinit var profileNameText: TextView
     private lateinit var profileEmailText: TextView
 
+    @SuppressLint("CutPasteId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
