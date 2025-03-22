@@ -11,8 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.togetherproject.model.AuthRepository
 
-private const val param1 = "param1"
-private const val param2 = "param2"
 
 class loginFragment : Fragment() {
 

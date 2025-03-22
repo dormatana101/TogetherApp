@@ -21,11 +21,15 @@ class MainActivity : AppCompatActivity() {
     private var userEmail: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, FeedFragment())
+                .commit()
+        }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-                                if (currentFragment !is FeedFragment) {
+                if (currentFragment !is FeedFragment) {
                                     handleHomeClick()
                                 } else {
                                     finishAffinity()
@@ -42,10 +46,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val addPostButton = findViewById<ImageView>(R.id.add_icon)
-        addPostButton.setOnClickListener {
-            handleAddPostClick(false, null)
-        }
 
         val homePageButton = findViewById<ImageView>(R.id.home_icon)
         homePageButton.setOnClickListener {
@@ -116,11 +116,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun launchBrowser(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
-    }
-
     fun handleHomeClick() {
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.beginTransaction().apply {
@@ -144,16 +139,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun switchFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, fragment)
-        fragmentTransaction.commit()
-    }
-
-    fun setLoading(isLoading: Boolean) {
-        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
     fun editPost(postId: String?) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, addPostFragment.newInstance(true, postId))

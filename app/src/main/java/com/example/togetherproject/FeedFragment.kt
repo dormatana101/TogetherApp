@@ -37,21 +37,6 @@ class PostsViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
         imageProfile = itemView.findViewById(R.id.ProfileImage)
 
     }
-    /*itemView.setOnClickListener{
-            adapterPosition
-        }
-        itemView.findViewById<View>(R.id.student_row).setOnClickListener {
-            val intent = Intent(itemView.context, StudentDetailsActivity::class.java).apply {
-                putExtra("STUDENT_ID", student?.id)
-                putExtra("STUDENT_NAME", student?.name)
-                putExtra("STUDENT_ADDRESS", student?.address)
-                putExtra("STUDENT_PHONE", student?.phone)
-                putExtra("STUDENT_IS_CHECKED", student?.isChecked)
-                putExtra("STUDENT_INDEX", adapterPosition)
-            }
-            itemView.context.startActivity(intent)
-        }
-*/
 
 
     fun bind(post: Post) {
@@ -60,7 +45,6 @@ class PostsViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
         postTextView?.text = post.content
         dateTextView?.text = dateFormat.format(post.timestamp)
 
-       // Picasso.get().load(uri).into(profileImage)
         if(post.profileImage != "image") {
             try {
                 Picasso.get()
@@ -69,8 +53,6 @@ class PostsViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
                     .into(imageProfile)
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Handle the error, e.g., set a placeholder image
-                //imagePost!!.setImageResource(R.drawable.image)
             }
         }
 
@@ -81,12 +63,9 @@ class PostsViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
             } catch (e: Exception) {
                 imagePost?.visibility = View.GONE
                 e.printStackTrace()
-                // Handle the error, e.g., set a placeholder image
-                //imagePost!!.setImageResource(R.drawable.image)
             }
         }
-        //val resourceId = itemView.context.resources.getIdentifier(post.imagePost, "drawable", itemView.context.packageName)
-        //imagePost?.setImageResource(resourceId)
+
 
 
 
@@ -118,30 +97,36 @@ class PostRecycleAdapter(private var posts : List<Post>?): RecyclerView.Adapter<
 
 
 class FeedFragment : Fragment() {
-    //var adapter: PostRecycleAdapter? = null
     var adapter = PostRecycleAdapter(Model.instance.postList)
     var posts: MutableList<Post> = ArrayList()
+    private lateinit var emptyView: TextView
+
     private lateinit var progressBar: ProgressBar
-    private lateinit var  recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = inflater.inflate(R.layout.fragment_feed, container, false)
+        val view = inflater.inflate(R.layout.fragment_feed, container, false)
 
         progressBar = view.findViewById(R.id.feedProgressBar)
 
-        posts = Model.instance.postList
+        posts =  mutableListOf()
+        emptyView = view.findViewById(R.id.emptyView)
 
         recyclerView = view.findViewById(R.id.fragment_feed_recycler_view)
         recyclerView.setHasFixedSize(true)
-
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         adapter = PostRecycleAdapter(posts)
         recyclerView.adapter = adapter
+
+        val fabCreatePost = view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab_create_post)
+        fabCreatePost.setOnClickListener {
+            (activity as? MainActivity)?.handleAddPostClick(false, null)
+        }
         getAllPosts()
         return view
     }
@@ -155,16 +140,26 @@ class FeedFragment : Fragment() {
     }
 
     private fun getAllPosts() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        emptyView.visibility = View.GONE
 
         Model.instance.retrievePosts { fetchedPosts ->
-
             posts.clear()
             posts.addAll(fetchedPosts)
 
             adapter?.set(posts)
             adapter?.notifyDataSetChanged()
+
             progressBar.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+
+            if (posts.isEmpty()) {
+                emptyView.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            } else {
+                emptyView.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
         }
     }
 }

@@ -193,7 +193,6 @@ class articlesFragment : Fragment() {
 
                     articles = fetchedArticles
 
-                    // Update UI on Main Thread
                     CoroutineScope(Dispatchers.Main).launch {
                         adapter.set(articles)
                         adapter.notifyDataSetChanged()
@@ -211,15 +210,6 @@ class articlesFragment : Fragment() {
 
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment articlesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             articlesFragment().apply {
