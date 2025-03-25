@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.togetherproject.loginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_login_to_feed"
+            app:destination="@id/feedFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.togetherproject.RegisterFragment"
+        android:label="Register">
+        <action
+            android:id="@+id/action_register_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_register_to_feed"
+            app:destination="@id/feedFragment" />
+    </fragment>
+
+<!--    <fragment-->
+<!--        android:id="@+id/feedFragment"-->
+<!--        android:name="com.example.togetherproject.FeedFragment"-->
+<!--        android:label="Feed">-->
+<!--        <action-->
+<!--            android:id="@+id/action_feed_to_addPost"-->
+<!--            app:destination="@id/addPostFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_feed_to_myProfile"-->
+<!--            app:destination="@id/myProfileFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_feed_to_articles"-->
+<!--            app:destination="@id/articlesFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_feed_to_myPosts"-->
+<!--            app:destination="@id/myPostsFragment" />-->
+<!--    </fragment>-->
+
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="com.example.togetherproject.addPostFragment"
+        android:label="Add Post">
+        <action
+            android:id="@+id/action_addPost_to_feed"
+            app:destination="@id/feedFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.example.togetherproject.myProfileFragment"
+        android:label="My Profile">
+        <action
+            android:id="@+id/action_myProfile_to_editProfile"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.togetherproject.editProfileFragment"
+        android:label="Edit Profile" >
+        <action
+            android:id="@+id/action_editProfile_to_myProfile"
+            app:destination="@id/myProfileFragment" />
+    </fragment>
+
+<!--    <fragment-->
+<!--        android:id="@+id/articlesFragment"-->
+<!--        android:name="com.example.togetherproject.articlesFragment"-->
+<!--        android:label="Articles" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/myPostsFragment"-->
+<!--&lt;!&ndash;        android:name="com.example.togetherproject.MyPostsFragment"&ndash;&gt;-->
+<!--        android:label="My Posts">-->
+<!--        <action-->
+<!--            android:id="@+id/action_myPosts_to_addPost"-->
+<!--            app:destination="@id/addPostFragment" />-->
+<!--    </fragment>-->
+</navigation>
