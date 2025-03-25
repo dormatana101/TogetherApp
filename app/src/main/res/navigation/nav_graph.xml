@@ -28,23 +28,23 @@
             app:destination="@id/feedFragment" />
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/feedFragment"-->
-<!--        android:name="com.example.togetherproject.FeedFragment"-->
-<!--        android:label="Feed">-->
-<!--        <action-->
-<!--            android:id="@+id/action_feed_to_addPost"-->
-<!--            app:destination="@id/addPostFragment" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_feed_to_myProfile"-->
-<!--            app:destination="@id/myProfileFragment" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_feed_to_articles"-->
-<!--            app:destination="@id/articlesFragment" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_feed_to_myPosts"-->
-<!--            app:destination="@id/myPostsFragment" />-->
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.example.togetherproject.FeedFragment"
+        android:label="Feed">
+        <action
+            android:id="@+id/action_feed_to_addPost"
+            app:destination="@id/addPostFragment" />
+        <action
+            android:id="@+id/action_feed_to_myProfile"
+            app:destination="@id/myProfileFragment" />
+        <action
+            android:id="@+id/action_feed_to_articles"
+            app:destination="@id/articlesFragment" />
+        <action
+            android:id="@+id/action_feed_to_myPosts"
+            app:destination="@id/myPostsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/addPostFragment"
@@ -73,17 +73,17 @@
             app:destination="@id/myProfileFragment" />
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/articlesFragment"-->
-<!--        android:name="com.example.togetherproject.articlesFragment"-->
-<!--        android:label="Articles" />-->
+    <fragment
+        android:id="@+id/articlesFragment"
+        android:name="com.example.togetherproject.articlesFragment"
+        android:label="Articles" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/myPostsFragment"-->
-<!--&lt;!&ndash;        android:name="com.example.togetherproject.MyPostsFragment"&ndash;&gt;-->
-<!--        android:label="My Posts">-->
-<!--        <action-->
-<!--            android:id="@+id/action_myPosts_to_addPost"-->
-<!--            app:destination="@id/addPostFragment" />-->
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/myPostsFragment"
+        android:name="com.example.togetherproject.MyPostsFragment"
+        android:label="My Posts">
+        <action
+            android:id="@+id/action_myPosts_to_addPost"
+            app:destination="@id/addPostFragment" />
+    </fragment>
 </navigation>

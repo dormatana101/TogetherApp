@@ -8,10 +8,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.findNavController
 import com.example.togetherproject.model.AuthRepository
+
 
 class LoginRegisterActivity : AppCompatActivity() {
     var authServer = AuthRepository.authRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -19,16 +22,14 @@ class LoginRegisterActivity : AppCompatActivity() {
                 goToHomeScreen()
                 return
             }
+
             enableEdgeToEdge()
             setContentView(R.layout.activity_login_register)
+
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
-            }
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.fragment_container, loginFragment())
-                commit()
             }
         } catch (e: Exception) {
             Log.e("TAG", "Error in onCreate: ${e.message}")
@@ -36,17 +37,13 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     fun handleNewMemberAction(view: View) {
-        Log.d("TAG", "Debug: switching to registration view")
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, RegisterFragment())
-            commit()
-        }
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.action_login_to_register)
     }
+
     fun handleBackAction(view: View) {
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, loginFragment())
-            commit()
-        }
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.action_register_to_login)
     }
 
     fun goToHomeScreen() {
