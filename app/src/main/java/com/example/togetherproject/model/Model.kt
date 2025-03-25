@@ -14,6 +14,7 @@ data class Post(
     var timestamp: java.util.Date,
 )
 
+
 class Model private constructor() {
     private val firestore = Firebase.firestore
     @Volatile

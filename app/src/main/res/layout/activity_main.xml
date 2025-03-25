@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <!-- Заголовок -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -22,7 +21,6 @@
             android:src="@drawable/logo" />
     </LinearLayout>
 
-    <!-- Динамический контент -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
@@ -55,7 +53,7 @@
             android:maxHeight="40dp"
             android:maxWidth="40dp" />
         <ImageView
-            android:id="@+id/articles_icon"
+            android:id="@+id/map_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +64,7 @@
             android:maxHeight="40dp"
             android:maxWidth="40dp" />
         <ImageView
-            android:id="@+id/map_icon"
+            android:id="@+id/articles_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -90,18 +88,6 @@
             android:maxWidth="40dp" />
 
         <ImageView
-            android:id="@+id/add_icon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/add"
-            android:layout_gravity="center"
-            android:padding="6dp"
-            android:adjustViewBounds="true"
-            android:maxHeight="40dp"
-            android:maxWidth="40dp" />
-
-        <ImageView
             android:id="@+id/profile_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -114,7 +100,6 @@
             android:maxWidth="40dp" />
     </LinearLayout>
 
-    <!-- Добавленный ProgressBar для обработки showLoading() -->
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleLarge"

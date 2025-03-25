@@ -119,7 +119,6 @@ class addPostFragment : Fragment() {
                 postImage.setImageBitmap(bitmap)
                 addedImageToPost = true
             }
-            //binding?.imageView?.setImageBitmap(bitmap)
         }
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {

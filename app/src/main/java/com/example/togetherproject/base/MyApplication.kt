@@ -1,5 +1,6 @@
 package com.example.togetherproject.base
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -24,6 +25,7 @@ class MyApplication : Application() {
         Log.d("MyApplication", "Cloudinary initialized with config.")
     }
 
+    @SuppressLint("StaticFieldLeak")
     object Globals {
         var context: Context? = null
     }

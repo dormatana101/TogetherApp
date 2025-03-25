@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,7 +52,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_title" />
 
-    <!-- Password Field -->
     <EditText
         android:id="@+id/password_field"
         android:layout_width="0dp"
@@ -89,7 +87,6 @@
         app:layout_constraintEnd_toEndOf="@id/password_field"
         app:layout_constraintTop_toBottomOf="@id/password_field" />
 
-    <!-- Login Button -->
     <Button
         android:id="@+id/login_button"
         android:layout_width="0dp"
@@ -105,9 +102,7 @@
         app:layout_constraintStart_toStartOf="@id/password_field"
         app:layout_constraintTop_toBottomOf="@id/new_member_link" />
 
-    <!-- Or Login With Separator -->
 
-    <!-- Social Login Buttons -->
     <LinearLayout
         android:id="@+id/social_login_buttons"
         android:layout_width="0dp"

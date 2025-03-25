@@ -1,5 +1,6 @@
 package com.example.togetherproject
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import com.example.togetherproject.model.AuthRepository
 import com.example.togetherproject.model.UserRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
@@ -20,6 +23,7 @@ class myProfileFragment : Fragment() {
     private lateinit var profileNameText: TextView
     private lateinit var profileEmailText: TextView
 
+    @SuppressLint("CutPasteId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,17 +49,22 @@ class myProfileFragment : Fragment() {
             profileImage.visibility = View.VISIBLE
         }
 
-        val logOutbtn = view.findViewById<Button>(R.id.logoutButton)
+        val logOutbtn=view.findViewById<Button>(R.id.logoutButton)
+        val authServer=AuthRepository.authRepository
         logOutbtn.setOnClickListener {
+            authServer.logOutUser()
+            Toast.makeText(context,"You logged out, have a great day", Toast.LENGTH_LONG).show()
             (activity as? MainActivity)?.redirectToLogin()
         }
-
+        val profileName = view.findViewById<TextView>(R.id.profileName)
+        val profileEmail=view.findViewById<TextView>(R.id.profileEmail)
         UserRepository.shared.retrieveUserData { user ->
             if (user != null) {
-                profileNameText.text = user["name"].toString()
-                profileEmailText.text = user["email"].toString()
+                profileName.text = user["name"].toString()
+                profileEmail.text = user["email"].toString()
             }
         }
+
 
         return view
     }
