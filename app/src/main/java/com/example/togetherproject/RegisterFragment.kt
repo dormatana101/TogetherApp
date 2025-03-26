@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.togetherproject.model.AuthRepository
 import com.example.togetherproject.model.UserRepository
+import com.example.togetherproject.model.local.AppDatabase
+import com.example.togetherproject.model.local.UserEntity
 
 class RegisterFragment : Fragment() {
 
@@ -70,13 +72,18 @@ class RegisterFragment : Fragment() {
                 if (success) {
                     userServer.createUserProfile(username, email) { success, error ->
                         if (success) {
-                            Log.d("TAG", "User profile created successfully in database")
+                            // ⬇ שמירה גם ב־Room
+                            val userEntity = UserEntity(email = email, name = username, image = "")
+                            val db = AppDatabase.getDatabase(requireContext())
+                            Thread {
+                                db.userDao().insertUser(userEntity)
+                            }.start()
+                            Log.d("TAG", "User saved in Room")
                         } else {
                             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                         }
                     }
 
-                    // ממשיכים ל־MainActivity
                     (activity as? LoginRegisterActivity)?.goToHomeScreen()
                     Log.d("TAG", "Registration completed successfully")
                 } else {
@@ -85,4 +92,5 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
 }

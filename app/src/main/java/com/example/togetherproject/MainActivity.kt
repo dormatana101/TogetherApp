@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.example.togetherproject.model.UserRepository
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var progressBar: ProgressBar
@@ -18,6 +19,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        intent.getStringExtra("user_name")?.let { profileName = it }
+        intent.getStringExtra("user_email")?.let { userEmail = it }
+
 
         // טעינת הפיד כברירת מחדל
         if (savedInstanceState == null) {

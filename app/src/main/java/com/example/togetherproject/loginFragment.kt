@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.togetherproject.model.AuthRepository
+import com.example.togetherproject.model.local.AppDatabase
 
 class loginFragment : Fragment() {
 
@@ -54,12 +55,26 @@ class loginFragment : Fragment() {
 
             server.signInUser(email, password) { success, error ->
                 if (success) {
-                    // אם ההתחברות הצליחה – נעבור ל־MainActivity
-                    (activity as? LoginRegisterActivity)?.goToHomeScreen()
+                    // ⬇ טען את המשתמש מ־Room ושמור ל־MainActivity
+                    val db = AppDatabase.getDatabase(requireContext())
+                    Thread {
+                        val user = db.userDao().getUserByEmail(email)
+                        activity?.runOnUiThread {
+                            if (user != null) {
+                                // שמור ב־MainActivity
+                                (activity as? LoginRegisterActivity)?.goToHomeScreenWithUser(user.name, user.email)
+                            } else {
+                                // fallback – כניסה רגילה
+                                (activity as? LoginRegisterActivity)?.goToHomeScreen()
+                            }
+                        }
+                    }.start()
                 } else {
                     Toast.makeText(requireContext(), error ?: "Sign in unsuccessful", Toast.LENGTH_SHORT).show()
                 }
             }
+
         }
+
     }
 }

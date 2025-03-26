@@ -17,6 +17,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.example.togetherproject.model.UserRepository
+import com.example.togetherproject.model.local.AppDatabase
+import com.example.togetherproject.model.local.UserEntity
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
@@ -102,20 +104,38 @@ class editProfileFragment : Fragment() {
             } else {
                 profileImage.isDrawingCacheEnabled = true
                 profileImage.buildDrawingCache()
+                val newName = editProfileName.text.toString()
+                val newPassword = editProfilePassword.text.toString()
+
                 userServer.modifyUserProfile(
-                    editProfileName.text.toString(),
-                    editProfilePassword.text.toString(),
+                    newName,
+                    newPassword,
                     bitmap
                 ) { success, error ->
                     if (success) {
                         Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT).show()
                         (activity as? MainActivity)?.updateProfileData()
                         (activity as? MainActivity)?.handleProfileClick()
+
+                        // ⬇ שמירה גם ב־Room
+                        val mainActivity = activity as? MainActivity
+                        val email = mainActivity?.retrieveUserEmail()
+                        if (email != null) {
+                            val db = AppDatabase.getDatabase(requireContext())
+                            val userImage = "" // תוכל בעתיד לשלב את ה־URL מהשרת אם קיים
+                            val updatedUser = UserEntity(email = email, name = newName, image = userImage)
+                            Thread {
+                                db.userDao().insertUser(updatedUser)
+                            }.start()
+                        }
+
                     } else {
                         Toast.makeText(context, "Update error: $error", Toast.LENGTH_SHORT).show()
                     }
                 }
+
             }
+
         }
         val CancelButtonEditProfile = view.findViewById<Button>(R.id.CancelButtonEditProfile)
         CancelButtonEditProfile.setOnClickListener {

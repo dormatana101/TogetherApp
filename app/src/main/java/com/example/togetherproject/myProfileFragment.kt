@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.togetherproject.model.AuthRepository
 import com.example.togetherproject.model.UserRepository
+import com.example.togetherproject.model.local.AppDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
@@ -58,12 +59,31 @@ class myProfileFragment : Fragment() {
         }
         val profileName = view.findViewById<TextView>(R.id.profileName)
         val profileEmail=view.findViewById<TextView>(R.id.profileEmail)
-        UserRepository.shared.retrieveUserData { user ->
-            if (user != null) {
-                profileName.text = user["name"].toString()
-                profileEmail.text = user["email"].toString()
-            }
+        val mainActivity = activity as? MainActivity
+        val userEmail = mainActivity?.retrieveUserEmail()
+
+        if (userEmail != null) {
+            val db = AppDatabase.getDatabase(requireContext())
+            Thread {
+                val localUser = db.userDao().getUserByEmail(userEmail)
+                activity?.runOnUiThread {
+                    if (localUser != null) {
+                        profileName.text = localUser.name
+                        profileEmail.text = localUser.email
+                        // תוכל לטעון גם תמונה אם תרצה דרך localUser.image
+                    } else {
+                        // fallback ל־Firebase אם אין ב־Room
+                        UserRepository.shared.retrieveUserData { user ->
+                            if (user != null) {
+                                profileName.text = user["name"].toString()
+                                profileEmail.text = user["email"].toString()
+                            }
+                        }
+                    }
+                }
+            }.start()
         }
+
 
 
         return view

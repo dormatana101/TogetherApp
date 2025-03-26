@@ -52,4 +52,13 @@ class LoginRegisterActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    fun goToHomeScreenWithUser(name: String, email: String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.putExtra("user_name", name)
+        intent.putExtra("user_email", email)
+        startActivity(intent)
+        finish()
+    }
+
 }

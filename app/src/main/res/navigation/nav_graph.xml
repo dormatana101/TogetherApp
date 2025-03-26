@@ -85,17 +85,27 @@
     </fragment>
 
     <fragment
-        android:id="@+id/articlesFragment"
-        android:name="com.example.togetherproject.articlesFragment"
-        android:label="Articles" />
-
-    <fragment
         android:id="@+id/myPostsFragment"
         android:name="com.example.togetherproject.MyPostsFragment"
         android:label="My Posts">
+
         <action
-            android:id="@+id/action_myPosts_to_addPost"
-            app:destination="@id/addPostFragment" />
+            android:id="@+id/action_feed_to_addPost"
+            app:destination="@id/addPostFragment">
+
+            <argument
+                android:name="isEdit"
+                app:argType="boolean"
+                android:defaultValue="false" />
+
+            <argument
+                android:name="postId"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
+
+
     </fragment>
+
 
 </navigation>

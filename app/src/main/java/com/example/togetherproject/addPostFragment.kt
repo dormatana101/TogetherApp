@@ -26,13 +26,14 @@ class addPostFragment : Fragment() {
     private var galleryLauncher: ActivityResultLauncher<String>? = null
     private lateinit var progressBar: ProgressBar
 
+    private val args: addPostFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            isEdit = it.getBoolean("isEdit", false)
-            postId = it.getString("postId")
-        }
+        isEdit = args.isEdit
+        postId = args.postId
     }
+
 
 
     override fun onCreateView(
