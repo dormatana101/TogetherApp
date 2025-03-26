@@ -20,6 +20,10 @@
         android:theme="@style/Theme.TogetherProject"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAQ3QwWWm3XMstKU452ApjiZX2JqJOxEUg" />
+
         <activity
             android:name=".LoginRegisterActivity"
             android:exported="true">
