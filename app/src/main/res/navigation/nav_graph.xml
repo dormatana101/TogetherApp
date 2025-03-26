@@ -50,6 +50,17 @@
         android:id="@+id/addPostFragment"
         android:name="com.example.togetherproject.addPostFragment"
         android:label="Add Post">
+
+        <!-- כאן שמים את הפרמטרים -->
+        <argument
+            android:name="isEdit"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="postId"
+            app:argType="string"
+            app:nullable="true" />
+
         <action
             android:id="@+id/action_addPost_to_feed"
             app:destination="@id/feedFragment" />
@@ -86,4 +97,5 @@
             android:id="@+id/action_myPosts_to_addPost"
             app:destination="@id/addPostFragment" />
     </fragment>
+
 </navigation>
