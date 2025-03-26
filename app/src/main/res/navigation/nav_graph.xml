@@ -50,8 +50,6 @@
         android:id="@+id/addPostFragment"
         android:name="com.example.togetherproject.addPostFragment"
         android:label="Add Post">
-
-        <!-- כאן שמים את הפרמטרים -->
         <argument
             android:name="isEdit"
             app:argType="boolean"
@@ -60,7 +58,6 @@
             android:name="postId"
             app:argType="string"
             app:nullable="true" />
-
         <action
             android:id="@+id/action_addPost_to_feed"
             app:destination="@id/feedFragment" />
@@ -78,7 +75,7 @@
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.togetherproject.editProfileFragment"
-        android:label="Edit Profile" >
+        android:label="Edit Profile">
         <action
             android:id="@+id/action_editProfile_to_myProfile"
             app:destination="@id/myProfileFragment" />
@@ -88,24 +85,22 @@
         android:id="@+id/myPostsFragment"
         android:name="com.example.togetherproject.MyPostsFragment"
         android:label="My Posts">
-
         <action
             android:id="@+id/action_feed_to_addPost"
             app:destination="@id/addPostFragment">
-
             <argument
                 android:name="isEdit"
                 app:argType="boolean"
                 android:defaultValue="false" />
-
             <argument
                 android:name="postId"
                 app:argType="string"
                 app:nullable="true" />
         </action>
-
-
     </fragment>
 
-
+    <fragment
+        android:id="@+id/articlesFragment"
+        android:name="com.example.togetherproject.articlesFragment"
+        android:label="Articles" />
 </navigation>
