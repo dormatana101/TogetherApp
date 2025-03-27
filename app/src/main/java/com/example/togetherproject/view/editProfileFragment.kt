@@ -16,16 +16,15 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import com.example.togetherproject.model.local.UserRepository
-import com.example.togetherproject.model.local.AppDatabase
-import com.example.togetherproject.model.local.UserEntity
-import com.squareup.picasso.Picasso
-import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import androidx.lifecycle.ViewModelProvider
 import com.example.togetherproject.MainActivity
 import com.example.togetherproject.R
+import com.example.togetherproject.model.local.AppDatabase
+import com.example.togetherproject.model.local.UserEntity
+import com.example.togetherproject.model.local.UserRepository
 import com.example.togetherproject.viewmodel.EditProfileViewModel
-
+import com.squareup.picasso.Picasso
+import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -51,7 +50,6 @@ class editProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
         val editIcon = view.findViewById<ImageView>(R.id.editIcon)
@@ -62,10 +60,8 @@ class editProfileFragment : Fragment() {
         val editProfileName = view.findViewById<EditText>(R.id.editProfileName)
         val editProfileConfirmPass = view.findViewById<EditText>(R.id.editProfileConfirmPassword)
 
-        // 🟢 אתחול ViewModel
         viewModel = ViewModelProvider(this)[EditProfileViewModel::class.java]
 
-        // 🟢 תצפית על מצב שמירה
         viewModel.isSaving.observe(viewLifecycleOwner) { saving ->
             saveButton.isEnabled = !saving
             if (saving) {
@@ -73,7 +69,6 @@ class editProfileFragment : Fragment() {
             }
         }
 
-        // 🟢 תצפית על הצלחה
         viewModel.saveSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 Toast.makeText(requireContext(), "Profile successfully updated", Toast.LENGTH_SHORT).show()
@@ -82,14 +77,12 @@ class editProfileFragment : Fragment() {
             }
         }
 
-        // 🟢 תצפית על שגיאה
         viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
             msg?.let {
                 Toast.makeText(requireContext(), "Update error: $it", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // 🖼️ פתיחת מצלמה או גלריה
         cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             if (bitmap != null) {
                 profileImage.setImageBitmap(bitmap)
@@ -125,16 +118,23 @@ class editProfileFragment : Fragment() {
             builder.show()
         }
 
-        // 💾 לחיצה על כפתור שמירה
+        val mainActivity = activity as? MainActivity
+        val currentName = mainActivity?.retrieveUserName() ?: ""
+        editProfileName.setText(currentName)
+
         saveButton.setOnClickListener {
             val bitmap: Bitmap? = if (addedImageToProfile) {
                 (profileImage.drawable as BitmapDrawable).bitmap
             } else null
 
-            val name = editProfileName.text.toString()
+            val name = editProfileName.text.toString().trim()
             val password = editProfilePassword.text.toString()
             val confirm = editProfileConfirmPass.text.toString()
 
+            if (name.isEmpty()) {
+                Toast.makeText(context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             if (password != confirm) {
                 Toast.makeText(context, "Mismatch: passwords do not align", Toast.LENGTH_SHORT).show()
             } else if (password.length < 6 && password.isNotEmpty()) {
@@ -142,12 +142,11 @@ class editProfileFragment : Fragment() {
             } else {
                 viewModel.updateProfile(name, password, bitmap)
 
-                // שמירה גם ב-Room
                 val mainActivity = activity as? MainActivity
                 val email = mainActivity?.retrieveUserEmail()
                 if (email != null) {
                     val db = AppDatabase.getDatabase(requireContext())
-                    val userImage = "" // תוכל בעתיד לשלב URL אמיתי
+                    val userImage = ""
                     val updatedUser = UserEntity(email = email, name = name, image = userImage)
                     Thread {
                         db.userDao().insertUser(updatedUser)
@@ -161,7 +160,6 @@ class editProfileFragment : Fragment() {
             (activity as? MainActivity)?.handleProfileClick()
         }
 
-        // טעינת תמונת פרופיל קיימת
         UserRepository.shared.getProfileImageUrl { uri ->
             if (uri != null) {
                 Picasso.get().load(uri).transform(CropCircleTransformation()).into(profileImage)
@@ -170,7 +168,6 @@ class editProfileFragment : Fragment() {
 
         return view
     }
-
 
     companion object {
         @JvmStatic
