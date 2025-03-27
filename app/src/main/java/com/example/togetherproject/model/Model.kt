@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 data class Post(
     val id: String,
@@ -34,10 +36,13 @@ class Model private constructor() {
     }
 
     fun publishPost(email: String, image: Bitmap?, content: String, callback: (Boolean, String?) -> Unit) {
+
+        val timestamp = ZonedDateTime.now(ZoneId.of("Asia/Jerusalem")).toInstant().toEpochMilli()
+
         val post = hashMapOf(
             "email" to email,
             "content" to content,
-            "timestamp" to System.currentTimeMillis(),
+            "timestamp" to timestamp,
             "imageUrl" to ""
         )
 

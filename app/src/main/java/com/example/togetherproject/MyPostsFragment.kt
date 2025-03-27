@@ -20,6 +20,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import java.text.SimpleDateFormat
 import java.util.Locale
 import android.util.Log
+import java.util.TimeZone
 
 class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Unit) :
     RecyclerView.ViewHolder(itemView) {
@@ -44,11 +45,16 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
     }
 
     fun bind(post: Post) {
+        // Set the date format and time zone
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jerusalem")  // Change this to your local time zone
+
+        // Bind data to views
         profileNameTextView?.text = post.name
         postTextView?.text = post.content
-        dateTextView?.text = dateFormat.format(post.timestamp)
+        dateTextView?.text = dateFormat.format(post.timestamp)  // Format timestamp and set to TextView
 
+        // Set profile image
         if (post.profileImage != "image") {
             try {
                 Picasso.get()
@@ -60,6 +66,7 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
             }
         }
 
+        // Set post image
         if (imagePost != null) {
             try {
                 imagePost?.visibility = View.VISIBLE
@@ -70,10 +77,12 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
             }
         }
 
+        // Set up edit button click listener
         editButton?.setOnClickListener {
             onEditClick(post.id)
         }
 
+        // Set up delete button click listener
         deleteButton?.setOnClickListener {
             AlertDialog.Builder(itemView.context)
                 .setTitle("Delete Post")
@@ -94,6 +103,7 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
                 .show()
         }
     }
+
 }
 
 class MyPostRecycleAdapter(
