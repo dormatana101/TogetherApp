@@ -1,4 +1,4 @@
-package com.example.togetherproject
+package com.example.togetherproject.view
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -10,16 +10,18 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.togetherproject.model.Model
 import com.example.togetherproject.model.Post
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import java.text.SimpleDateFormat
 import java.util.Locale
-import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import com.example.togetherproject.MainActivity
+import com.example.togetherproject.R
+import com.example.togetherproject.viewmodel.MyPostsViewModel
+
 
 class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Unit) :
     RecyclerView.ViewHolder(itemView) {
@@ -79,11 +81,10 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
                 .setTitle("Delete Post")
                 .setMessage("Are you sure you want to delete this post?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                    Model.instance.deletePost(post.id) { success, _ ->
-                        if (success) {
-                            Toast.makeText(itemView.context, "Your post was deleted successfully!", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(itemView.context, "Connection failed", Toast.LENGTH_LONG).show()
+                    (itemView.context as? MainActivity)?.let { activity ->
+                        val fragment = activity.supportFragmentManager.findFragmentById(R.id.fragment_container)
+                        if (fragment is MyPostsFragment) {
+                            fragment.viewModel.deletePost(post.id)
                         }
                     }
                     dialog.dismiss()
@@ -93,6 +94,7 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
                 }
                 .show()
         }
+
     }
 }
 
@@ -117,8 +119,9 @@ class MyPostRecycleAdapter(
 }
 
 class MyPostsFragment : Fragment() {
-    private var adapter: MyPostRecycleAdapter? = null
-    private var posts: MutableList<Post> = ArrayList()
+    lateinit var viewModel: MyPostsViewModel
+    private lateinit var adapter: MyPostRecycleAdapter
+    private var posts: MutableList<Post> = mutableListOf()
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
@@ -131,11 +134,9 @@ class MyPostsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_my_posts, container, false)
 
-
         progressBar = view.findViewById(R.id.feedProgressBar)
         recyclerView = view.findViewById(R.id.fragment_feed_recycler_view)
         emptyView = view.findViewById(R.id.emptyView)
-
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -145,33 +146,15 @@ class MyPostsFragment : Fragment() {
         }
         recyclerView.adapter = adapter
 
-        getMyPosts()
+        // 🟦 יצירת ViewModel
+        viewModel = ViewModelProvider(this)[MyPostsViewModel::class.java]
 
-        val fabCreatePost = view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab_create_post)
-        fabCreatePost.setOnClickListener {
-            (activity as? MainActivity)?.handleAddPostClick(false, null)
-        }
-
-
-        return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getMyPosts()
-    }
-
-    private fun getMyPosts() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        emptyView.visibility = View.GONE
-
-        Model.instance.retrieveUserPosts { fetchedPosts ->
-            progressBar.visibility = View.GONE
+        // 🟦 תצפית על הפוסטים
+        viewModel.myPostsLiveData.observe(viewLifecycleOwner) { fetchedPosts ->
             posts.clear()
             posts.addAll(fetchedPosts)
-            adapter?.set(posts)
-            adapter?.notifyDataSetChanged()
+            adapter.set(posts)
+            adapter.notifyDataSetChanged()
 
             if (posts.isEmpty()) {
                 emptyView.visibility = View.VISIBLE
@@ -181,6 +164,37 @@ class MyPostsFragment : Fragment() {
                 recyclerView.visibility = View.VISIBLE
             }
         }
+
+        // 🟦 תצפית על טעינה
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        }
+
+        // 🟦 תצפית על הצלחת מחיקה
+        viewModel.deleteSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Your post was deleted successfully!", Toast.LENGTH_LONG).show()
+                viewModel.loadMyPosts()
+            }
+        }
+
+        // 🟦 תצפית על שגיאות
+        viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
+            msg?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.loadMyPosts()
+
+        val fabCreatePost = view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(
+            R.id.fab_create_post
+        )
+        fabCreatePost.setOnClickListener {
+            (activity as? MainActivity)?.handleAddPostClick(false, null)
+        }
+
+        return view
     }
 
 

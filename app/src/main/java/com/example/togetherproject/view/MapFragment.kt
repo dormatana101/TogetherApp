@@ -1,4 +1,4 @@
-package com.example.togetherproject
+package com.example.togetherproject.view
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.togetherproject.R
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior

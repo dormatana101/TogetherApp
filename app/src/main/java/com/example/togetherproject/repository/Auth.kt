@@ -1,7 +1,8 @@
-package com.example.togetherproject.model
+package com.example.togetherproject.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+
 
 class AuthRepository {
 

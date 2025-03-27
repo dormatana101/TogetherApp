@@ -1,4 +1,4 @@
-package com.example.togetherproject
+package com.example.togetherproject.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,15 +9,22 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.example.togetherproject.model.AuthRepository
+import com.example.togetherproject.repository.AuthRepository
 import com.example.togetherproject.model.local.AppDatabase
+import androidx.lifecycle.ViewModelProvider
+import com.example.togetherproject.LoginRegisterActivity
+import com.example.togetherproject.MainActivity
+import com.example.togetherproject.R
+import com.example.togetherproject.viewmodel.AuthViewModel
+
 
 class loginFragment : Fragment() {
 
     private lateinit var emailField: EditText
     private lateinit var passwordField: EditText
     private lateinit var loginButton: Button
+    private lateinit var viewModel: AuthViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,14 +32,57 @@ class loginFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
-        // ⬇️ מעבר למסך הרשמה דרך NavController
-        val newMemberTextView: TextView = view.findViewById(R.id.new_member_link)
-        newMemberTextView.setOnClickListener {
-            findNavController().navigate(R.id.action_login_to_register)
+        val emailEditText = view.findViewById<EditText>(R.id.email_field_login)
+        val passwordEditText = view.findViewById<EditText>(R.id.password_field)
+        val loginButton = view.findViewById<Button>(R.id.login_button)
+        val registerLink = view.findViewById<TextView>(R.id.new_member_link)
+
+
+        // 🟢 אתחול ViewModel
+        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+
+        // 🟢 תצפית על טעינה
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            // בעתיד תוכל להוסיף ProgressBar
+        }
+
+        // 🟢 תצפית על הצלחה
+        viewModel.authSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Login success", Toast.LENGTH_SHORT).show()
+                (activity as? MainActivity)?.handleHomeClick()
+            }
+        }
+
+        // 🟢 תצפית על שגיאה
+        viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
+            msg?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // 🟢 התחברות
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            viewModel.login(email, password)
+        }
+
+        // מעבר לרישום
+        registerLink.setOnClickListener {
+            (activity as? MainActivity)?.handleRegisterClick()
+
         }
 
         return view
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

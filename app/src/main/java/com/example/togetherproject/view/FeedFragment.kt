@@ -1,4 +1,4 @@
-package com.example.togetherproject
+package com.example.togetherproject.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,15 +8,18 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.togetherproject.model.Model
 import com.example.togetherproject.model.Post
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.lifecycle.ViewModelProvider
+import com.example.togetherproject.R
+import com.example.togetherproject.viewmodel.FeedViewModel
+
+
 
 class PostsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var profileNameTextView: TextView? = null
@@ -83,8 +86,9 @@ class PostRecycleAdapter(private var posts: List<Post>?) : RecyclerView.Adapter<
 }
 
 class FeedFragment : Fragment() {
-    private var adapter = PostRecycleAdapter(Model.instance.postList)
-    private var posts: MutableList<Post> = ArrayList()
+    private lateinit var adapter: PostRecycleAdapter
+    private var posts: MutableList<Post> = mutableListOf()
+    private lateinit var viewModel: FeedViewModel
     private lateinit var emptyView: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
@@ -102,35 +106,18 @@ class FeedFragment : Fragment() {
         recyclerView = view.findViewById(R.id.fragment_feed_recycler_view)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
-
         adapter = PostRecycleAdapter(posts)
         recyclerView.adapter = adapter
 
+        // 🟩 יצירת ViewModel
+        viewModel = ViewModelProvider(this)[FeedViewModel::class.java]
 
-        getAllPosts()
-        return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        getAllPosts()
-    }
-
-    private fun getAllPosts() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        emptyView.visibility = View.GONE
-
-        Model.instance.retrievePosts { fetchedPosts ->
+        // 🟩 תצפית על הפוסטים
+        viewModel.postsLiveData.observe(viewLifecycleOwner) { fetchedPosts ->
             posts.clear()
             posts.addAll(fetchedPosts)
-
             adapter.set(posts)
             adapter.notifyDataSetChanged()
-
-            progressBar.visibility = View.GONE
 
             if (posts.isEmpty()) {
                 emptyView.visibility = View.VISIBLE
@@ -140,5 +127,15 @@ class FeedFragment : Fragment() {
                 recyclerView.visibility = View.VISIBLE
             }
         }
+
+        // 🟩 תצפית על מצב טעינה
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.loadPosts()
+
+        return view
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.togetherproject
+package com.example.togetherproject.view
 
 import android.app.AlertDialog
 import android.graphics.Bitmap
@@ -16,11 +16,19 @@ import androidx.navigation.fragment.navArgs
 import com.example.togetherproject.model.Model
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
+import androidx.lifecycle.ViewModelProvider
+import com.example.togetherproject.MainActivity
+import com.example.togetherproject.R
+import com.example.togetherproject.model.local.UserRepository
+import com.example.togetherproject.viewmodel.AddPostViewModel
+
 
 class addPostFragment : Fragment() {
 
     private var isEdit: Boolean = false
     private var postId: String? = null
+    private lateinit var viewModel: AddPostViewModel
+
 
     private var cameraLauncher: ActivityResultLauncher<Void?>? = null
     private var galleryLauncher: ActivityResultLauncher<String>? = null
@@ -50,9 +58,29 @@ class addPostFragment : Fragment() {
         val postImage = view.findViewById<ImageView>(R.id.postImage)
         val profileImage = view.findViewById<ImageView>(R.id.profileImage)
 
-        val userServer = com.example.togetherproject.model.UserRepository.shared
+        val userServer = UserRepository.shared
         val email = (activity as? MainActivity)?.retrieveUserEmail().toString()
         profileName.text = (activity as? MainActivity)?.retrieveUserName()
+
+        // 🟩 אתחול ViewModel
+        viewModel = ViewModelProvider(this)[AddPostViewModel::class.java]
+
+        viewModel.isUploading.observe(viewLifecycleOwner) { uploading ->
+            progressBar.visibility = if (uploading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.uploadSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                Toast.makeText(context, "Your post was shared successfully!", Toast.LENGTH_LONG).show()
+                (activity as? MainActivity)?.handleHomeClick()
+            }
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
+            msg?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+        }
 
         var addedImageToPost = false
 
@@ -114,12 +142,24 @@ class addPostFragment : Fragment() {
             }
         } else {
             postButton.setOnClickListener {
-                handleNewPost(email, postText, postImage, addedImageToPost)
+                val content = postText.text.toString()
+                if (content.isEmpty()) {
+                    Toast.makeText(context, "Post empty is invalid", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+
+                val bitmap = if (addedImageToPost) {
+                    (postImage.drawable as BitmapDrawable).bitmap
+                } else null
+
+                viewModel.createPost(email, content, bitmap)
+                postText.text.clear()
             }
         }
 
         return view
     }
+
 
     private fun handleNewPost(email: String, postText: EditText, postImage: ImageView, addedImage: Boolean) {
         val content = postText.text.toString()
@@ -128,28 +168,17 @@ class addPostFragment : Fragment() {
             return
         }
 
-        if (addedImage) {
-            val bitmap = (postImage.drawable as BitmapDrawable).bitmap
-            Model.instance.publishPost(email, bitmap, content) { success, error ->
-                if (success) {
-                    Toast.makeText(context, "Your post was shared successfully!", Toast.LENGTH_LONG).show()
-                    (activity as? MainActivity)?.handleHomeClick()
-                } else {
-                    Toast.makeText(context, "Connection failed", Toast.LENGTH_LONG).show()
-                }
-            }
+        val bitmap = if (addedImage) {
+            (postImage.drawable as BitmapDrawable).bitmap
         } else {
-            Model.instance.publishPost(email, null, content) { success, error ->
-                if (success) {
-                    Toast.makeText(context, "Your post was shared successfully!", Toast.LENGTH_LONG).show()
-                    (activity as? MainActivity)?.handleHomeClick()
-                } else {
-                    Toast.makeText(context, "Connection failed", Toast.LENGTH_LONG).show()
-                }
-            }
+            null
         }
+
+        viewModel.createPost(email, content, bitmap)
+
         postText.text.clear()
     }
+
 
     private fun handleEditPost(postText: EditText, postImage: ImageView, addedImage: Boolean) {
         val content = postText.text.toString()
@@ -159,28 +188,14 @@ class addPostFragment : Fragment() {
         }
 
         val id = postId ?: return
-        if (addedImage) {
-            val bitmap = (postImage.drawable as BitmapDrawable).bitmap
-            Model.instance.modifyPost(id, bitmap, content) { success, error ->
-                if (success) {
-                    Toast.makeText(context, "Your post was updated successfully!", Toast.LENGTH_LONG).show()
-                    (activity as? MainActivity)?.handleArticlesClick()
-                } else {
-                    Toast.makeText(context, "Connection failed", Toast.LENGTH_LONG).show()
-                }
-            }
-        } else {
-            Model.instance.modifyPost(id, null, content) { success, error ->
-                if (success) {
-                    Toast.makeText(context, "Your post was updated successfully!", Toast.LENGTH_LONG).show()
-                    (activity as? MainActivity)?.handleArticlesClick()
-                } else {
-                    Toast.makeText(context, "Connection failed", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+        val bitmap = if (addedImage) {
+            (postImage.drawable as BitmapDrawable).bitmap
+        } else null
+
+        viewModel.editPost(id, content, bitmap)
         postText.text.clear()
     }
+
 
     private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
         val width = bitmap.width

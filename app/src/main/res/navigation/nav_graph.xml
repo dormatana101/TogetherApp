@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.togetherproject.loginFragment"
+        android:name="com.example.togetherproject.view.loginFragment"
         android:label="Login">
         <action
             android:id="@+id/action_login_to_register"
@@ -20,13 +20,13 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.togetherproject.MapFragment"
+        android:name="com.example.togetherproject.view.MapFragment"
         android:label="Map Fragment"
         tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.togetherproject.RegisterFragment"
+        android:name="com.example.togetherproject.view.RegisterFragment"
         android:label="Register">
         <action
             android:id="@+id/action_register_to_login"
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.example.togetherproject.FeedFragment"
+        android:name="com.example.togetherproject.view.FeedFragment"
         android:label="Feed">
         <action
             android:id="@+id/action_feed_to_addPost"
@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/addPostFragment"
-        android:name="com.example.togetherproject.addPostFragment"
+        android:name="com.example.togetherproject.view.addPostFragment"
         android:label="Add Post">
         <argument
             android:name="isEdit"
@@ -73,7 +73,7 @@
 
     <fragment
         android:id="@+id/myProfileFragment"
-        android:name="com.example.togetherproject.myProfileFragment"
+        android:name="com.example.togetherproject.view.myProfileFragment"
         android:label="My Profile">
         <action
             android:id="@+id/action_myProfile_to_editProfile"
@@ -82,7 +82,7 @@
 
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.togetherproject.editProfileFragment"
+        android:name="com.example.togetherproject.view.editProfileFragment"
         android:label="Edit Profile">
         <action
             android:id="@+id/action_editProfile_to_myProfile"
@@ -91,7 +91,7 @@
 
     <fragment
         android:id="@+id/myPostsFragment"
-        android:name="com.example.togetherproject.MyPostsFragment"
+        android:name="com.example.togetherproject.view.MyPostsFragment"
         android:label="My Posts">
         <action
             android:id="@+id/action_feed_to_addPost"
@@ -109,6 +109,6 @@
 
     <fragment
         android:id="@+id/articlesFragment"
-        android:name="com.example.togetherproject.articlesFragment"
+        android:name="com.example.togetherproject.view.articlesFragment"
         android:label="Articles" />
 </navigation>

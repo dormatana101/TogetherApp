@@ -1,10 +1,7 @@
 package com.example.togetherproject
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
@@ -12,9 +9,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.togetherproject.model.UserRepository
+import com.example.togetherproject.model.local.UserRepository
+import com.example.togetherproject.view.FeedFragment
+import com.example.togetherproject.view.MapFragment
+import com.example.togetherproject.view.MyPostsFragment
+import com.example.togetherproject.view.RegisterFragment
+import com.example.togetherproject.view.addPostFragment
+import com.example.togetherproject.view.articlesFragment
+import com.example.togetherproject.view.editProfileFragment
+import com.example.togetherproject.view.loginFragment
+import com.example.togetherproject.view.myProfileFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -172,4 +177,18 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    fun handleRegisterClick() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, RegisterFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+    fun handleLoginClick() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, loginFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+
 }

@@ -2,6 +2,8 @@ package com.example.togetherproject.model
 
 import android.graphics.Bitmap
 import android.util.Log
+import com.example.togetherproject.model.local.UserRepository
+import com.example.togetherproject.repository.AuthRepository
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 

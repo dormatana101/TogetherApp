@@ -1,9 +1,8 @@
-package com.example.togetherproject
+package com.example.togetherproject.view
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.telecom.Call
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,21 +14,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cloudinary.android.uploadwidget.UploadWidget.startActivity
-import com.example.togetherproject.base.MyApplication.Globals.context
-import com.example.togetherproject.model.Model
-import com.example.togetherproject.model.Post
+import com.example.togetherproject.R
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
-import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

@@ -1,4 +1,4 @@
-package com.example.togetherproject
+package com.example.togetherproject.view
 
 import android.os.Bundle
 import android.util.Log
@@ -7,13 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
-import com.example.togetherproject.model.AuthRepository
-import com.example.togetherproject.model.UserRepository
+import com.example.togetherproject.repository.AuthRepository
+import com.example.togetherproject.model.local.UserRepository
 import com.example.togetherproject.model.local.AppDatabase
 import com.example.togetherproject.model.local.UserEntity
+import androidx.lifecycle.ViewModelProvider
+import com.example.togetherproject.LoginRegisterActivity
+import com.example.togetherproject.MainActivity
+import com.example.togetherproject.R
+import com.example.togetherproject.viewmodel.AuthViewModel
+
 
 class RegisterFragment : Fragment() {
 
@@ -22,6 +28,8 @@ class RegisterFragment : Fragment() {
     private lateinit var confirmPasswordField: TextView
     private lateinit var registerButton: Button
     private lateinit var name: TextView
+    private lateinit var viewModel: AuthViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,13 +37,56 @@ class RegisterFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
 
-        val backButton: Button = view.findViewById(R.id.back_button)
-        backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_register_to_login)
+        val emailEditText = view.findViewById<EditText>(R.id.email_field)
+        val passwordEditText = view.findViewById<EditText>(R.id.password_field)
+        val confirmEditText = view.findViewById<EditText>(R.id.confirm_password_field)
+        val registerButton = view.findViewById<Button>(R.id.Register_button)
+        val backButton = view.findViewById<Button>(R.id.back_button)
+
+
+
+        // 🟢 אתחול ViewModel
+        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            // אם תרצה להוסיף ProgressBar בהמשך
         }
+
+        viewModel.authSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Registration success", Toast.LENGTH_SHORT).show()
+                (activity as? MainActivity)?.handleLoginClick()
+            }
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
+            msg?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        registerButton.setOnClickListener {
+            val email = emailEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+            val confirm = confirmEditText.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+                Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (password != confirm) {
+                Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            viewModel.register(email, password)
+        }
+
 
         return view
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
