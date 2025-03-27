@@ -2,6 +2,8 @@ package com.example.togetherproject.view
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -19,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -130,13 +133,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun addMarkers(placesList: List<Place>) {
         googleMap.clear()
         for (place in placesList) {
+            val originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.pin)
+
+            val width = 80
+            val height = 80
+            val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, false)
+
             val markerOptions = MarkerOptions()
                 .position(LatLng(place.lat, place.lng))
                 .title(place.name)
+                .icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap))
+
             val marker = googleMap.addMarker(markerOptions)
             marker?.tag = place
         }
     }
+
 
     private fun showPlaceDetails(place: Place) {
         bottomSheetTitle.text = place.name
