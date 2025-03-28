@@ -60,5 +60,16 @@ class LoginRegisterActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    fun goToRegisterScreen() {
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.action_login_to_register)
+    }
+    fun goToLoginScreen() {
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.action_register_to_login)
+    }
+
+
+
 
 }

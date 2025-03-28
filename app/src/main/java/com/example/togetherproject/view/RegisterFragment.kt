@@ -43,8 +43,9 @@ class RegisterFragment : Fragment() {
         val registerButton = view.findViewById<Button>(R.id.Register_button)
         val backButton = view.findViewById<Button>(R.id.back_button)
 
-
-
+        backButton.setOnClickListener {
+            (activity as? LoginRegisterActivity)?.handleBackAction(it)
+        }
         // 🟢 אתחול ViewModel
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 

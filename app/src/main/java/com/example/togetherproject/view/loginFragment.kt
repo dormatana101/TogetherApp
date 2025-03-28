@@ -76,7 +76,7 @@ class loginFragment : Fragment() {
 
         // מעבר לרישום
         registerLink.setOnClickListener {
-            (activity as? MainActivity)?.handleRegisterClick()
+            (activity as? LoginRegisterActivity)?.goToRegisterScreen()
 
         }
 
