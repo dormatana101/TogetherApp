@@ -1,6 +1,7 @@
 package com.example.togetherproject.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,27 +23,21 @@ import com.example.togetherproject.viewmodel.FeedViewModel
 
 
 class PostsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    var profileNameTextView: TextView? = null
-    var postTextView: TextView? = null
-    var imageProfile: ImageView? = null
-    var dateTextView: TextView? = null
-    var imagePost: ImageView? = null
-
-    init {
-        profileNameTextView = itemView.findViewById(R.id.profileName)
-        postTextView = itemView.findViewById(R.id.textPost)
-        dateTextView = itemView.findViewById(R.id.postDate)
-        imagePost = itemView.findViewById(R.id.imagePost)
-        imageProfile = itemView.findViewById(R.id.ProfileImage)
-    }
+    private val profileNameTextView: TextView = itemView.findViewById(R.id.profileName)
+    private val postTextView: TextView = itemView.findViewById(R.id.textPost)
+    private val imageProfile: ImageView = itemView.findViewById(R.id.ProfileImage)
+    private val dateTextView: TextView = itemView.findViewById(R.id.postDate)
+    private val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
 
     fun bind(post: Post) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        profileNameTextView?.text = post.name
-        postTextView?.text = post.content
-        dateTextView?.text = dateFormat.format(post.timestamp)
+        profileNameTextView.text = post.name
+        postTextView.text = post.content
+        dateTextView.text = dateFormat.format(post.timestamp)
 
-        if (post.profileImage != "image") {
+        if (post.profileImage == "image" || post.profileImage == "ic_user") {
+            imageProfile.setImageResource(R.drawable.ic_user)
+        } else {
             try {
                 Picasso.get()
                     .load(post.profileImage)
@@ -50,20 +45,20 @@ class PostsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .into(imageProfile)
             } catch (e: Exception) {
                 e.printStackTrace()
+                imageProfile.setImageResource(R.drawable.ic_user)
             }
         }
 
-        if (imagePost != null) {
-            try {
-                imagePost?.visibility = View.VISIBLE
-                Picasso.get().load(post.imageUrl).into(imagePost)
-            } catch (e: Exception) {
-                imagePost?.visibility = View.GONE
-                e.printStackTrace()
-            }
+        try {
+            imagePost.visibility = View.VISIBLE
+            Picasso.get().load(post.imageUrl).into(imagePost)
+        } catch (e: Exception) {
+            imagePost.visibility = View.GONE
+            e.printStackTrace()
         }
     }
 }
+
 
 class PostRecycleAdapter(private var posts: List<Post>?) : RecyclerView.Adapter<PostsViewHolder>() {
     override fun getItemCount(): Int {

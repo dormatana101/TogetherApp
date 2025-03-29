@@ -27,6 +27,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_user"
             tools:ignore="ContentDescription" />
 
         <TextView
