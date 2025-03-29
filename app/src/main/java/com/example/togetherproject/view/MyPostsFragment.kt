@@ -23,8 +23,9 @@ import com.example.togetherproject.R
 import com.example.togetherproject.viewmodel.MyPostsViewModel
 
 
-class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Unit) :
+class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Unit, private val onDeleteClick: (String) -> Unit) :
     RecyclerView.ViewHolder(itemView) {
+
     var profileNameTextView: TextView? = null
     var postTextView: TextView? = null
     var imageProfile: ImageView? = null
@@ -81,12 +82,7 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
                 .setTitle("Delete Post")
                 .setMessage("Are you sure you want to delete this post?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                    (itemView.context as? MainActivity)?.let { activity ->
-                        val fragment = activity.supportFragmentManager.findFragmentById(R.id.fragment_container)
-                        if (fragment is MyPostsFragment) {
-                            fragment.viewModel.deletePost(post.id)
-                        }
-                    }
+                    onDeleteClick(post.id) // ✅ מפעיל ישירות את הפונקציה מה־Fragment
                     dialog.dismiss()
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
@@ -95,12 +91,14 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
                 .show()
         }
 
+
     }
 }
 
 class MyPostRecycleAdapter(
     private var posts: List<Post>?,
-    private val onEditClick: (String) -> Unit
+    private val onEditClick: (String) -> Unit,
+    private val onDeleteClick: (String) -> Unit
 ) : RecyclerView.Adapter<MyPostsViewHolder>() {
     override fun getItemCount(): Int = posts?.size ?: 0
 
@@ -110,7 +108,7 @@ class MyPostRecycleAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPostsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.my_post_row, parent, false)
-        return MyPostsViewHolder(view, onEditClick)
+        return MyPostsViewHolder(view, onEditClick, onDeleteClick)
     }
 
     override fun onBindViewHolder(holder: MyPostsViewHolder, position: Int) {
@@ -141,9 +139,12 @@ class MyPostsFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        adapter = MyPostRecycleAdapter(posts) { postId ->
-            editPostButtonClicked(postId)
-        }
+        adapter = MyPostRecycleAdapter(
+            posts,
+            onEditClick = { postId -> editPostButtonClicked(postId) },
+            onDeleteClick = { postId -> viewModel.deletePost(postId) } // 🆕 חדש
+        )
+
         recyclerView.adapter = adapter
 
         // 🟦 יצירת ViewModel

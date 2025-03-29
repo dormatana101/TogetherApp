@@ -137,8 +137,7 @@ class RegisterFragment : Fragment() {
                         }
                     }
 
-                    val navController = findNavController()
-                    navController.navigate(R.id.action_register_to_login)
+                    (activity as? LoginRegisterActivity)?.goToHomeScreenWithUser(username, email)
 
                     Log.d("TAG", "Registration completed successfully")
                 } else {
