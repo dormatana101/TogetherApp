@@ -1,6 +1,5 @@
 package com.example.togetherproject.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,64 +21,69 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
-
 class myProfileFragment : Fragment() {
 
     private lateinit var progressBar: ProgressBar
     private lateinit var profileNameText: TextView
     private lateinit var profileEmailText: TextView
+    private lateinit var profileImage: ImageView
     private lateinit var viewModel: ProfileViewModel
 
-
-    @SuppressLint("CutPasteId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_my_profile, container, false)
 
-        val profileImage = view.findViewById<ImageView>(R.id.profileImage)
+        profileImage = view.findViewById(R.id.profileImage)
         val editButton: FloatingActionButton = view.findViewById(R.id.editButton)
         val logoutButton: Button = view.findViewById(R.id.logoutButton)
         progressBar = view.findViewById(R.id.profileImageProgressBar)
         profileNameText = view.findViewById(R.id.profileName)
         profileEmailText = view.findViewById(R.id.profileEmail)
 
-        // 🟦 אתחול ViewModel
+        profileImage.visibility = View.INVISIBLE
+        profileNameText.visibility = View.INVISIBLE
+        profileEmailText.visibility = View.INVISIBLE
+        progressBar.visibility = View.VISIBLE
+
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
-        // 🟦 תצפית על שם
-        viewModel.name.observe(viewLifecycleOwner) {
-            profileNameText.text = it
+        viewModel.name.observe(viewLifecycleOwner) { name ->
+            profileNameText.text = name
         }
 
-        // 🟦 תצפית על אימייל
-        viewModel.email.observe(viewLifecycleOwner) {
-            profileEmailText.text = it
+        viewModel.email.observe(viewLifecycleOwner) { email ->
+            profileEmailText.text = email
         }
 
-        // 🟦 תצפית על תמונה
         viewModel.imageUrl.observe(viewLifecycleOwner) { url ->
             if (!url.isNullOrEmpty()) {
-                Picasso.get().load(url)
+                Picasso.get()
+                    .load(url)
+                    .noFade()
+                    .placeholder(android.R.color.transparent)
                     .transform(CropCircleTransformation())
                     .into(profileImage)
             } else {
-                // טען מ־Firebase אם אין URL מקומי
                 UserRepository.shared.getProfileImageUrl { uri ->
                     if (uri != null) {
-                        Picasso.get().load(uri)
+                        Picasso.get()
+                            .load(uri)
+                            .noFade()
+                            .placeholder(android.R.color.transparent)
                             .transform(CropCircleTransformation())
                             .into(profileImage)
                     }
                 }
             }
-
             progressBar.visibility = View.GONE
             profileImage.visibility = View.VISIBLE
+            profileNameText.visibility = View.VISIBLE
+            profileEmailText.visibility = View.VISIBLE
         }
 
-        // 🟦 טעינת פרופיל מה־ViewModel
+
         val mainActivity = activity as? MainActivity
         val userEmail = mainActivity?.retrieveUserEmail()
         if (userEmail != null) {
@@ -87,12 +91,10 @@ class myProfileFragment : Fragment() {
             viewModel.loadProfile(userEmail, db)
         }
 
-        // 🔄 כפתור עריכה
         editButton.setOnClickListener {
             (activity as? MainActivity)?.handleEditProfileClick()
         }
 
-        // 🔐 כפתור יציאה
         logoutButton.setOnClickListener {
             AuthRepository.authRepository.logOutUser()
             Toast.makeText(context, "You logged out, have a great day", Toast.LENGTH_LONG).show()
@@ -101,5 +103,4 @@ class myProfileFragment : Fragment() {
 
         return view
     }
-
 }

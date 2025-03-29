@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import com.example.togetherproject.R
 import com.example.togetherproject.data.Place
 import com.example.togetherproject.data.PlaceRepository
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -172,12 +173,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun moveCameraToUserLocation() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
-            val currentLocation = googleMap.myLocation
-            if (currentLocation != null) {
-                val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
-            } else {
-                Toast.makeText(requireContext(), "Current location not available", Toast.LENGTH_SHORT).show()
+
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
+                } else {
+                    Toast.makeText(requireContext(), "Current location not available", Toast.LENGTH_SHORT).show()
+                }
+            }.addOnFailureListener { e ->
+                Toast.makeText(requireContext(), "Failed to get location: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         } else {
             Toast.makeText(requireContext(), "Location permission not granted", Toast.LENGTH_SHORT).show()

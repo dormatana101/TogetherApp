@@ -123,18 +123,18 @@ class RegisterFragment : Fragment() {
             authServer.createAccount(email, password) { success, error ->
                 if (success) {
                     userServer.createUserProfile(username, email) { success, error ->
+                        if (!isAdded) return@createUserProfile
                         if (success) {
-                            // ⬇ שמירה גם ב־Room
-                            val userEntity = UserEntity(email = email, name = username, image = "")
                             val db = AppDatabase.getDatabase(requireContext())
                             Thread {
-                                db.userDao().insertUser(userEntity)
+                                db.userDao().insertUser(UserEntity(email = email, name = username, image = ""))
                             }.start()
                             Log.d("TAG", "User saved in Room")
                         } else {
-                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
                         }
                     }
+
 
                     (activity as? LoginRegisterActivity)?.goToHomeScreen()
                     Log.d("TAG", "Registration completed successfully")
