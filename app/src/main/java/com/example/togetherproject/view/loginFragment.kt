@@ -1,5 +1,6 @@
 package com.example.togetherproject.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,15 +39,14 @@ class loginFragment : Fragment() {
         val registerLink = view.findViewById<TextView>(R.id.new_member_link)
 
 
-        // 🟢 אתחול ViewModel
+
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
-        // 🟢 תצפית על טעינה
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
-            // בעתיד תוכל להוסיף ProgressBar
+
         }
 
-        // 🟢 תצפית על הצלחה
+
         viewModel.authSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 Toast.makeText(requireContext(), "Login success", Toast.LENGTH_SHORT).show()
@@ -54,27 +54,42 @@ class loginFragment : Fragment() {
             }
         }
 
-        // 🟢 תצפית על שגיאה
+
         viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
             msg?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
 
-        // 🟢 התחברות
+
         loginButton.setOnClickListener {
-            val email = emailEditText.text.toString().trim()
-            val password = passwordEditText.text.toString().trim()
+            val email = emailField.text.toString()
+            val password = passwordField.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please complete all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            viewModel.login(email, password)
+            val server = AuthRepository.authRepository
+            server.signInUser(email, password) { success, error ->
+                if (success) {
+
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.putExtra("user_name", "User")
+                    intent.putExtra("user_email", email)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    requireActivity().finish()
+
+                } else {
+                    Toast.makeText(requireContext(), error ?: "Sign in unsuccessful", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
-        // מעבר לרישום
+
+
         registerLink.setOnClickListener {
             (activity as? LoginRegisterActivity)?.goToRegisterScreen()
 
@@ -105,16 +120,16 @@ class loginFragment : Fragment() {
 
             server.signInUser(email, password) { success, error ->
                 if (success) {
-                    // ⬇ טען את המשתמש מ־Room ושמור ל־MainActivity
+
                     val db = AppDatabase.getDatabase(requireContext())
                     Thread {
                         val user = db.userDao().getUserByEmail(email)
                         activity?.runOnUiThread {
                             if (user != null) {
-                                // שמור ב־MainActivity
+
                                 (activity as? LoginRegisterActivity)?.goToHomeScreenWithUser(user.name, user.email)
                             } else {
-                                // fallback – כניסה רגילה
+
                                 (activity as? LoginRegisterActivity)?.goToHomeScreen()
                             }
                         }

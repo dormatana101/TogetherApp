@@ -28,6 +28,7 @@ class MyPostsViewModel : ViewModel() {
             Model.instance.deletePost(postId) { success, error ->
                 if (success) {
                     deleteSuccess.postValue(true)
+
                 } else {
                     errorMessage.postValue(error ?: "Delete failed")
                     deleteSuccess.postValue(false)

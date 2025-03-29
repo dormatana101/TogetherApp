@@ -19,6 +19,8 @@ import com.example.togetherproject.LoginRegisterActivity
 import com.example.togetherproject.MainActivity
 import com.example.togetherproject.R
 import com.example.togetherproject.viewmodel.AuthViewModel
+import androidx.navigation.fragment.findNavController
+
 
 
 class RegisterFragment : Fragment() {
@@ -46,17 +48,17 @@ class RegisterFragment : Fragment() {
         backButton.setOnClickListener {
             (activity as? LoginRegisterActivity)?.handleBackAction(it)
         }
-        // 🟢 אתחול ViewModel
         viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
-            // אם תרצה להוסיף ProgressBar בהמשך
+
         }
 
         viewModel.authSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 Toast.makeText(requireContext(), "Registration success", Toast.LENGTH_SHORT).show()
-                (activity as? MainActivity)?.handleLoginClick()
+                findNavController().navigate(R.id.action_register_to_login)
+
             }
         }
 
@@ -135,8 +137,8 @@ class RegisterFragment : Fragment() {
                         }
                     }
 
+                    (activity as? LoginRegisterActivity)?.goToHomeScreenWithUser(username, email)
 
-                    (activity as? LoginRegisterActivity)?.goToHomeScreen()
                     Log.d("TAG", "Registration completed successfully")
                 } else {
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show()

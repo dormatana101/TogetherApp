@@ -94,9 +94,10 @@
         android:name="com.example.togetherproject.view.MyPostsFragment"
         android:label="My Posts">
         <action
-            android:id="@+id/action_feed_to_addPost"
+            android:id="@+id/action_myPosts_to_addPost"
             app:destination="@id/addPostFragment">
-            <argument
+
+        <argument
                 android:name="isEdit"
                 app:argType="boolean"
                 android:defaultValue="false" />

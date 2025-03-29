@@ -62,7 +62,6 @@ class addPostFragment : Fragment() {
         val email = (activity as? MainActivity)?.retrieveUserEmail().toString()
         profileName.text = (activity as? MainActivity)?.retrieveUserName()
 
-        // 🟩 אתחול ViewModel
         viewModel = ViewModelProvider(this)[AddPostViewModel::class.java]
 
         viewModel.isUploading.observe(viewLifecycleOwner) { uploading ->
@@ -213,14 +212,4 @@ class addPostFragment : Fragment() {
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(isEdit: Boolean, postId: String?) =
-            addPostFragment().apply {
-                arguments = Bundle().apply {
-                    putBoolean("isEdit", isEdit)
-                    putString("postId", postId)
-                }
-            }
-    }
 }
