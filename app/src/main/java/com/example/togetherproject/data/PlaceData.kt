@@ -21,7 +21,7 @@ object PlaceRepository {
             phone = "+972 3-1234567",
             workingHours = "09:00-18:00",
             description = "A volunteer center supporting community initiatives in Tel Aviv.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://i0.wp.com/volcenter.org/wp-content/uploads/2021/12/Building-1.jpg?fit=800%2C536&ssl=1",
             lat = 32.0853,
             lng = 34.7818
         ),
@@ -32,7 +32,7 @@ object PlaceRepository {
             phone = "+972 2-2345678",
             workingHours = "08:00-17:00",
             description = "Providing assistance to families in need and promoting volunteer work in Jerusalem.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://s3-media0.fl.yelpcdn.com/bphoto/AMoiAhqrPm9gPsmMF4DSCg/348s.jpg",
             lat = 31.7683,
             lng = 35.2137
         ),
@@ -54,7 +54,7 @@ object PlaceRepository {
             phone = "+972 8-4567890",
             workingHours = "09:00-17:00",
             description = "Helping local communities and tourists in the southern resort city.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://www.clantonadvertiser.com/wp-content/uploads/sites/30/2022/03/Fairview-present-station-1-1.jpg",
             lat = 29.5581,
             lng = 34.9482
         ),
@@ -65,7 +65,7 @@ object PlaceRepository {
             phone = "+972 3-5678901",
             workingHours = "08:30-18:00",
             description = "A center focused on volunteer activities in Netanya.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://img1.wsimg.com/isteam/stock/4431/:/rs=h:1000,cg:true,m",
             lat = 32.3219,
             lng = 34.8530
         ),
@@ -76,7 +76,7 @@ object PlaceRepository {
             phone = "+972 8-6789012",
             workingHours = "09:00-17:30",
             description = "Supporting local families and communities in Ashdod through volunteer efforts.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://cdn-hibhh.nitrocdn.com/cSmWTHYMVIExXzmhiWSuqcypazGVPyGD/assets/images/optimized/rev-3d527ad/wcc.ca/wp-content/uploads/2023/11/wcc-blog-What-is-the-role-of-a-community-support.jpg",
             lat = 31.8014,
             lng = 34.6423
         ),
@@ -87,7 +87,7 @@ object PlaceRepository {
             phone = "+972 8-7890123",
             workingHours = "08:00-16:00",
             description = "Connecting volunteers with local projects in Ashkelon.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://www.willitsnews.com/wp-content/uploads/2020/06/NCO.jpg?w=467",
             lat = 31.6688,
             lng = 34.5743
         ),
@@ -98,7 +98,7 @@ object PlaceRepository {
             phone = "+972 8-8901234",
             workingHours = "09:00-18:00",
             description = "Fostering volunteer activities in the southern city of Be'er Sheva.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://volunteerhub.com/hs-fs/hubfs/assets-volunteer-hub/home-optimized/jacobs-and-cushmon-san-diego-food-bank-volunteers.jpg?width=1160&height=951&name=jacobs-and-cushmon-san-diego-food-bank-volunteers.jpg",
             lat = 31.2520,
             lng = 34.7913
         ),
@@ -109,7 +109,7 @@ object PlaceRepository {
             phone = "+972 3-9012345",
             workingHours = "08:00-17:00",
             description = "Offering outreach services and volunteer opportunities in Rishon LeZion.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://www.fbcspringfield.com/wp-content/uploads/2022/12/coc-entrance-scaled-e1671337927646.jpg",
             lat = 32.0840,
             lng = 34.8048
         ),
@@ -120,7 +120,7 @@ object PlaceRepository {
             phone = "+972 3-0123456",
             workingHours = "09:00-17:00",
             description = "A local initiative engaging volunteers in various community projects.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://www.oceans-research.com/wp-content/uploads/2022/01/Short-term.jpg",
             lat = 32.0114,
             lng = 34.7736
         ),
@@ -131,7 +131,7 @@ object PlaceRepository {
             phone = "+972 3-1122334",
             workingHours = "08:30-17:30",
             description = "Providing volunteer services and community support in Bat Yam.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://www.fortworthtexas.gov/files/assets/public/v/3/parks-and-recreation/images/center-images/victory-forest-community-center.jpg?w=1200",
             lat = 32.0167,
             lng = 34.7500
         ),
@@ -142,7 +142,7 @@ object PlaceRepository {
             phone = "+972 3-2233445",
             workingHours = "09:00-18:00",
             description = "A hub for organizing volunteer activities in Petah Tikva.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://www.huntingtonhealth.org/wp-content/uploads/2023/12/volunteer-carousel-office-work.jpg",
             lat = 32.0841,
             lng = 34.8878
         ),
@@ -153,7 +153,7 @@ object PlaceRepository {
             phone = "+972 3-3344556",
             workingHours = "09:00-18:00",
             description = "Connecting volunteers with community service projects in Ramat Gan.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://charityvillage.com/wp-content/uploads/2024/02/Website-1.png",
             lat = 32.0689,
             lng = 34.8244
         ),
@@ -164,7 +164,7 @@ object PlaceRepository {
             phone = "+972 3-4455667",
             workingHours = "08:00-17:00",
             description = "Promoting volunteer engagement and community support in Raanana.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://unitedwaygmwc.org/UnitedWay/Blog-Content/Capture2.PNG?Large",
             lat = 32.1880,
             lng = 34.9094
         ),
@@ -175,7 +175,7 @@ object PlaceRepository {
             phone = "+972 3-5566778",
             workingHours = "09:00-17:00",
             description = "A center to support local volunteer projects in Kfar Saba.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://kiddingaroundgreenville.com/wp-content/uploads/2023/08/Volunteer-guide-min.png",
             lat = 32.1700,
             lng = 34.8714
         ),
@@ -208,7 +208,7 @@ object PlaceRepository {
             phone = "+972 3-8899001",
             workingHours = "09:00-18:00",
             description = "A center for organizing volunteer work and community outreach in Lod.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://causeconsulting.com/wp-content/uploads/2020/07/BK-1.jpg",
             lat = 31.9510,
             lng = 34.9080
         ),
@@ -219,7 +219,7 @@ object PlaceRepository {
             phone = "+972 3-9900112",
             workingHours = "09:00-18:00",
             description = "Fostering volunteer activities and community projects in Hadera.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://jewishpb.org/volunteer/wp-content/uploads/2024/06/KJVC-upcomimg-block-655x400-1.jpg",
             lat = 32.4340,
             lng = 34.9240
         ),
@@ -230,7 +230,7 @@ object PlaceRepository {
             phone = "+972 3-1011121",
             workingHours = "09:00-18:00",
             description = "A platform for volunteer initiatives in Herzliya.",
-            photoUrl = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+            photoUrl = "https://www.regionalfoodbank.org/wp-content/uploads/2022/07/Volunteer-Center-Opportunity-TRIO.jpg",
             lat = 32.1663,
             lng = 34.8555
         ),
