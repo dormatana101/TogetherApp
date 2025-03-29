@@ -58,7 +58,7 @@ class myProfileFragment : Fragment() {
         }
 
         viewModel.imageUrl.observe(viewLifecycleOwner) { url ->
-            if (!url.isNullOrEmpty()) {
+            if (!url.isNullOrEmpty() && url != "image" && url != "ic_user") {
                 Picasso.get()
                     .load(url)
                     .noFade()
@@ -67,13 +67,15 @@ class myProfileFragment : Fragment() {
                     .into(profileImage)
             } else {
                 UserRepository.shared.getProfileImageUrl { uri ->
-                    if (uri != null) {
+                    if (!uri.isNullOrBlank() && uri != "image" && uri != "ic_user") {
                         Picasso.get()
                             .load(uri)
                             .noFade()
                             .placeholder(android.R.color.transparent)
                             .transform(CropCircleTransformation())
                             .into(profileImage)
+                    } else {
+                        profileImage.setImageResource(R.drawable.ic_user)
                     }
                 }
             }
@@ -82,6 +84,7 @@ class myProfileFragment : Fragment() {
             profileNameText.visibility = View.VISIBLE
             profileEmailText.visibility = View.VISIBLE
         }
+
 
 
         val mainActivity = activity as? MainActivity

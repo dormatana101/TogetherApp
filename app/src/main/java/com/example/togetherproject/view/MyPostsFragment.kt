@@ -33,8 +33,6 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
     var editButton: ImageView? = null
     var deleteButton: ImageView? = null
 
-
-
     init {
         profileNameTextView = itemView.findViewById(R.id.profileName)
         postTextView = itemView.findViewById(R.id.textPost)
@@ -51,7 +49,9 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
         postTextView?.text = post.content
         dateTextView?.text = dateFormat.format(post.timestamp)
 
-        if (post.profileImage != "image") {
+        if (post.profileImage == "image" || post.profileImage == "ic_user") {
+            imageProfile?.setImageResource(R.drawable.ic_user)
+        } else {
             try {
                 Picasso.get()
                     .load(post.profileImage)
@@ -59,17 +59,16 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
                     .into(imageProfile)
             } catch (e: Exception) {
                 e.printStackTrace()
+                imageProfile?.setImageResource(R.drawable.ic_user)
             }
         }
 
-        if (imagePost != null) {
-            try {
-                imagePost?.visibility = View.VISIBLE
-                Picasso.get().load(post.imageUrl).into(imagePost)
-            } catch (e: Exception) {
-                imagePost?.visibility = View.GONE
-                e.printStackTrace()
-            }
+        try {
+            imagePost?.visibility = View.VISIBLE
+            Picasso.get().load(post.imageUrl).into(imagePost)
+        } catch (e: Exception) {
+            imagePost?.visibility = View.GONE
+            e.printStackTrace()
         }
 
         editButton?.setOnClickListener {
@@ -94,9 +93,9 @@ class MyPostsViewHolder(itemView: View, private val onEditClick: (String) -> Uni
                 }
                 .show()
         }
-
     }
 }
+
 
 class MyPostRecycleAdapter(
     private var posts: List<Post>?,
