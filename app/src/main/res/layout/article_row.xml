@@ -13,7 +13,7 @@
         android:id="@+id/articleSquare"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F7F7F7"
+        android:background="#E6F3FF"
         android:gravity="start"
         android:layoutDirection="ltr"
         android:orientation="horizontal"

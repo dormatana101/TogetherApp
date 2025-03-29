@@ -22,27 +22,24 @@ import com.example.togetherproject.R
 import com.example.togetherproject.model.local.UserRepository
 import com.example.togetherproject.viewmodel.AddPostViewModel
 
-
 class addPostFragment : Fragment() {
 
     private var isEdit: Boolean = false
     private var postId: String? = null
     private lateinit var viewModel: AddPostViewModel
 
-
     private var cameraLauncher: ActivityResultLauncher<Void?>? = null
     private var galleryLauncher: ActivityResultLauncher<String>? = null
     private lateinit var progressBar: ProgressBar
 
     private val args: addPostFragmentArgs by navArgs()
+    private var addedImageToPost = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isEdit = args.isEdit
         postId = args.postId
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +53,7 @@ class addPostFragment : Fragment() {
         val postButton = view.findViewById<TextView>(R.id.postButton)
         val addMediaButton = view.findViewById<TextView>(R.id.addMediaButton)
         val postImage = view.findViewById<ImageView>(R.id.postImage)
+        val removeImageButton = view.findViewById<ImageView>(R.id.removeImageButton)
         val profileImage = view.findViewById<ImageView>(R.id.profileImage)
 
         val userServer = UserRepository.shared
@@ -81,11 +79,13 @@ class addPostFragment : Fragment() {
             }
         }
 
-        var addedImageToPost = false
+        // === Launchers ===
 
         cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             bitmap?.let {
                 postImage.setImageBitmap(it)
+                postImage.visibility = View.VISIBLE
+                removeImageButton.visibility = View.VISIBLE
                 addedImageToPost = true
             }
         }
@@ -97,12 +97,25 @@ class addPostFragment : Fragment() {
                     val bitmap = BitmapFactory.decodeStream(inputStream)
                     val resized = resizeBitmap(bitmap, 200, 200)
                     postImage.setImageBitmap(resized)
+                    postImage.visibility = View.VISIBLE
+                    removeImageButton.visibility = View.VISIBLE
                     addedImageToPost = true
                 } catch (e: Exception) {
                     Toast.makeText(context, "Failed to load image", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
+        // === Remove Image Button ===
+
+        removeImageButton.setOnClickListener {
+            postImage.setImageDrawable(null)
+            postImage.visibility = View.GONE
+            removeImageButton.visibility = View.GONE
+            addedImageToPost = false
+        }
+
+        // === Add Media Button ===
 
         addMediaButton.setOnClickListener {
             val options = arrayOf("Take Photo", "Choose from Gallery")
@@ -115,6 +128,8 @@ class addPostFragment : Fragment() {
                 }.show()
         }
 
+        // === Load Profile Image ===
+
         progressBar.visibility = View.VISIBLE
         profileImage.visibility = View.GONE
         userServer.getProfileImage { uri ->
@@ -125,6 +140,8 @@ class addPostFragment : Fragment() {
             profileImage.visibility = View.VISIBLE
         }
 
+        // === Edit Mode ===
+
         if (isEdit && postId != null) {
             postButton.text = "Edit"
             Model.instance.getPostById(postId!!) { post ->
@@ -132,14 +149,19 @@ class addPostFragment : Fragment() {
                     postText.setText(it.content)
                     if (it.imageUrl.isNotEmpty()) {
                         Picasso.get().load(it.imageUrl).into(postImage)
+                        postImage.visibility = View.VISIBLE
+                        removeImageButton.visibility = View.VISIBLE
                         addedImageToPost = true
                     }
                 }
             }
+
             postButton.setOnClickListener {
                 handleEditPost(postText, postImage, addedImageToPost)
             }
+
         } else {
+            // === New Post ===
             postButton.setOnClickListener {
                 val content = postText.text.toString()
                 if (content.isEmpty()) {
@@ -159,26 +181,6 @@ class addPostFragment : Fragment() {
         return view
     }
 
-
-    private fun handleNewPost(email: String, postText: EditText, postImage: ImageView, addedImage: Boolean) {
-        val content = postText.text.toString()
-        if (content.isEmpty()) {
-            Toast.makeText(context, "Post empty is invalid", Toast.LENGTH_LONG).show()
-            return
-        }
-
-        val bitmap = if (addedImage) {
-            (postImage.drawable as BitmapDrawable).bitmap
-        } else {
-            null
-        }
-
-        viewModel.createPost(email, content, bitmap)
-
-        postText.text.clear()
-    }
-
-
     private fun handleEditPost(postText: EditText, postImage: ImageView, addedImage: Boolean) {
         val content = postText.text.toString()
         if (content.isEmpty()) {
@@ -195,7 +197,6 @@ class addPostFragment : Fragment() {
         postText.text.clear()
     }
 
-
     private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
@@ -211,5 +212,4 @@ class addPostFragment : Fragment() {
         }
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
     }
-
 }

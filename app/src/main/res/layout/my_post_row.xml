@@ -9,7 +9,7 @@
     android:clipToPadding="false"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    android:backgroundTint="#F5F5F5">
+    android:backgroundTint="#E6F3FF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -91,13 +91,13 @@
 
         <ImageView
             android:id="@+id/deletePostIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="34dp"
+            android:layout_height="22dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/imagePost"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/trash"
+            app:layout_constraintTop_toBottomOf="@id/imagePost"
+            app:srcCompat="@drawable/delete_button"
             tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
