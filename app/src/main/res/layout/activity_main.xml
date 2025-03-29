@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         android:background="#FFFFFF"
         android:elevation="4dp"
@@ -22,6 +22,8 @@
             android:layout_height="match_parent"
             android:src="@drawable/logo" />
     </LinearLayout>
+
+
 
     <fragment
         android:id="@+id/fragment_container"
@@ -46,33 +48,23 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/home_icon"
+            android:id="@+id/articles_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/home"
             android:layout_gravity="center"
-            android:padding="6dp"
+            android:layout_weight="1"
             android:adjustViewBounds="true"
+            android:maxWidth="40dp"
             android:maxHeight="40dp"
-            android:maxWidth="40dp" />
+            android:padding="6dp"
+            android:src="@drawable/map_button" />
+
         <ImageView
             android:id="@+id/map_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/articles"
-            android:layout_gravity="center"
-            android:padding="6dp"
-            android:adjustViewBounds="true"
-            android:maxHeight="40dp"
-            android:maxWidth="40dp" />
-        <ImageView
-            android:id="@+id/articles_icon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/map"
+            android:src="@drawable/articles_button"
             android:layout_gravity="center"
             android:padding="6dp"
             android:adjustViewBounds="true"
@@ -80,11 +72,23 @@
             android:maxWidth="40dp" />
 
         <ImageView
+            android:id="@+id/home_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
+            android:padding="6dp"
+            android:src="@drawable/home_button" />
+
+        <ImageView
             android:id="@+id/my_posts_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/my_posts"
+            android:src="@drawable/my_articles"
             android:layout_gravity="center"
             android:padding="6dp"
             android:adjustViewBounds="true"
@@ -96,7 +100,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/account"
+            android:src="@drawable/my_profile_button"
             android:layout_gravity="center"
             android:padding="6dp"
             android:adjustViewBounds="true"

@@ -1,39 +1,57 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_feed"
-    tools:context=".view.FeedFragment"
-    android:fillViewport="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".view.FeedFragment">
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/feed_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/emptyView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nothing to see here... yet."
-            android:textSize="18sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
 
+        <TextView
+            android:id="@+id/feed_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Feed"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            android:padding="12dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_feed_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:visibility="gone"
+            android:overScrollMode="never" />
+
+        <TextView
+            android:id="@+id/emptyView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nothing to see here... yet."
+            android:textSize="18sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            android:paddingTop="32dp"
             android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/feedProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
             android:visibility="gone"
             style="?android:attr/progressBarStyleLarge" />
 
-    </FrameLayout>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

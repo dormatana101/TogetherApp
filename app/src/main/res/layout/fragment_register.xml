@@ -140,8 +140,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:backgroundTint="#B68181"
-            android:text="Back"
+            android:backgroundTint="@color/darkRed"
+            android:text="Cancel"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
 

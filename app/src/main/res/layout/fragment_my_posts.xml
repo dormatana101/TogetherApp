@@ -1,16 +1,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="12dp">
 
+    <!-- Title -->
+    <TextView
+        android:id="@+id/my_posts_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Posts"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
+        android:padding="12dp" />
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_feed_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/my_posts_title"
         android:clipToPadding="false"
-        android:paddingBottom="72dp"
-        />
+        android:paddingBottom="72dp" />
 
+    <!-- Empty State -->
     <TextView
         android:id="@+id/emptyView"
         android:layout_width="wrap_content"
@@ -20,9 +35,9 @@
         android:textSize="18sp"
         android:textColor="#888888"
         android:visibility="gone"
-        android:layout_centerInParent="true"
-        />
+        android:layout_centerInParent="true" />
 
+    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_create_post"
         android:layout_width="wrap_content"
@@ -33,6 +48,7 @@
         android:contentDescription="Add Post"
         app:srcCompat="@drawable/add" />
 
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/feedProgressBar"
         android:layout_width="wrap_content"
